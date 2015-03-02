@@ -74,6 +74,35 @@
         }
     };
 
+    var featureHelpersMixin = {
+        /**
+         * @func _getRelationsForFeature
+         * @param {Array} relatedModels - The models related to your feature.
+         * @param {String} featureType - The type of feature you have e.g. 'regions'.
+         * @param {String} featureId - The the ID of the feature you have.
+         * @return {Array}
+         * @desc Given a feature, get all related models of a specific type.
+         */
+        _getRelationsForFeature: function (relatedModels, featureType, featureId) {
+            return _
+                .chain(relatedModels)
+                .filter(function (model) {
+                    var relationArray = model.get('properties')[featureType];
+
+                    // Make sure the featureType exists on the model.
+                    if (relationArray === void 0 || relationArray.length === 0) {
+                        return false;
+                    }
+
+                    return _.findWhere(relationArray, { id: featureId }) !== void 0;
+                })
+                .unique(function (model) {
+                    return model.get('properties').id;
+                })
+                .value();
+        }
+    };
+
     /**
      * @module DrillDownMenuView
      * @extends Marionette.LayoutView
@@ -259,9 +288,7 @@
 
             // Populate the panel's collection
             if (collectionFilter !== void 0) {
-                models = this.model.get(collectionKey).filter(function (featureModel) {
-                    return featureModel.get('properties')[collectionFilter.key] === collectionFilter.value;
-                });
+                models = this._getRelationsForFeature(this.model.get(collectionKey).models, collectionFilter.key, collectionFilter.value);
             } else {
                 models = this.model.get(collectionKey).models;
             }
@@ -272,7 +299,7 @@
             return panelView;
         }
     });
-    Cocktail.mixin(NZTAComponents.DrillDownMenuView, eventsMixin, browserHelpersMixin);
+    Cocktail.mixin(NZTAComponents.DrillDownMenuView, eventsMixin, browserHelpersMixin, featureHelpersMixin);
 
     /**
      * @module DrillDownPanelView
@@ -339,7 +366,7 @@
             this.trigger('drillDownMenu.navigate.back', this.cid);
         }
     });
-    Cocktail.mixin(NZTAComponents.DrillDownPanelView, eventsMixin, browserHelpersMixin);
+    Cocktail.mixin(NZTAComponents.DrillDownPanelView, eventsMixin, browserHelpersMixin, featureHelpersMixin);
 
     /**
      * @module DrillDownItemView
@@ -357,7 +384,7 @@
         }
 
     });
-    Cocktail.mixin(NZTAComponents.DrillDownItemView, browserHelpersMixin);
+    Cocktail.mixin(NZTAComponents.DrillDownItemView, browserHelpersMixin, featureHelpersMixin);
 
     /**
      * @module GeoJsonCollection
@@ -404,6 +431,17 @@
             return _.filter(this.models, function (featureModel) {
                 return featureModel.get('properties')[key] === value;
             });
+        },
+
+        /**
+         * @func _getFeatureById
+         * @param {String} featureId - The ID of the feature you're looking for.
+         * @return {Object}
+         */
+        _getFeatureById: function (featureId) {
+            return _.filter(function (featureModel) {
+                return featureModel.get('properties').id === featureId;
+            })[0];
         }
     });
     
