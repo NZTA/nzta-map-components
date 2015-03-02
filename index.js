@@ -207,10 +207,7 @@
 
             // Remove the previous panel if it's not the default panel.
             if (this._panelViews.length > 1) {
-                // Don't navigate forward if it's to a section. We haven't developed the section panel yet.
-                if (!forwardUrl.match(/section\//g)) {
-                    this._removePanel(this.model.get('currentPanelViewCid'));
-                }
+                this._removePanel(this.model.get('currentPanelViewCid'));
             }
 
             this.model.set('currentUrlSegment', forwardUrl);
