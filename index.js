@@ -436,7 +436,7 @@
          * @return {Object}
          */
         _getFeatureById: function (featureId) {
-            return _.filter(function (featureModel) {
+            return _.filter(this.models, function (featureModel) {
                 return featureModel.get('properties').id === featureId;
             })[0];
         }
