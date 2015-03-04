@@ -420,8 +420,8 @@
 
         /**
          * @func _getFeaturesByPropertyValue
-         * @param {string} - The key on the GeoJSON feature's `properties` to check against.
-         * @param {string} - The value of `key`.
+         * @param {string} key - The key on the GeoJSON feature's `properties` to check against.
+         * @param {string} value - The value of `key`.
          * @desc Get list of GeoJSON features filtered by a `properties` value.
          */
         _getFeaturesByPropertyValue: function (key, value) {
@@ -432,13 +432,33 @@
 
         /**
          * @func _getFeatureById
-         * @param {String} featureId - The ID of the feature you're looking for.
-         * @return {Object}
+         * @param {string} featureId - The ID of the feature you're looking for.
+         * @return {object}
          */
         _getFeatureById: function (featureId) {
             return _.filter(this.models, function (featureModel) {
                 return featureModel.get('properties').id === featureId;
             })[0];
+        },
+
+        /**
+         * @func _getFeaturesByRelation
+         * @param {string} relationKey - The property where the relation is on the model.
+         * @param {string} relationId - The ID of the relation.
+         * @return {array} - Filtered list of models
+         * @desc Filter the collection by related data.
+         */
+        _getFeaturesByRelation: function (relationKey, relationId) {
+            return _.filter(this.models, function (geoJsonModel) {
+                var relation = geoJsonModel.get('properties')[relationKey];
+
+                // Make sure the relation exists on the model.
+                if (relation === void 0 || relation.length === 0) {
+                    return false;
+                }
+
+                return _.findWhere(relation, { id: relationId }) !== void 0;
+            });
         }
     });
     
