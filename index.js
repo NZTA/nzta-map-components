@@ -14,6 +14,10 @@
         Backbone = root.Backbone = require('backbone');
     }
 
+    if (Backbone.Associations === void 0) {
+        Backbone = require('backbone-associations');
+    }
+
     if (_ === void 0) {
         _ = root._ = require('underscore');
     }
@@ -28,10 +32,6 @@
 
     if (Backbone.Marionette === void 0) {
         Backbone.Marionette = require('backbone.marionette');
-    }
-
-    if (Backbone.Associations === void 0) {
-        Backbone = require('backbone-associations');
     }
 
     module.exports = factory(Backbone, _, Cocktail);
@@ -633,11 +633,11 @@
                 // This is because the popup needs to transition into view, and adding the
                 // class during the render cycle means the animation doesn't happen.
                 _.defer(function () {
-                    $('body').addClass('modal-active');
+                    Backbone.$('body').addClass('modal-active');
                 });
             } else {
                 _.defer(function () {
-                    $('body').removeClass('modal-active');
+                    Backbone.$('body').removeClass('modal-active');
                 });
             }
         },
