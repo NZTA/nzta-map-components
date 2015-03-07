@@ -761,7 +761,7 @@
          * @override
          */
         onRender: function () {
-            this.$el.find('#key').replaceWith(this.options.mappy.key.domElement);
+            
         },
 
         /**
@@ -770,7 +770,7 @@
          * @desc Zooms the Map in.
          */
         _zoomIn: function (e) {
-            this.options.mappy.map.zoomIn(e.shiftKey ? 3 : 1);
+            
         },
 
         /**
@@ -779,7 +779,7 @@
          * @desc Zooms the Map out.
          */
         _zoomOut: function (e) {
-            this.options.mappy.map.zoomOut(e.shiftKey ? 3 : 1);
+            
         },
 
         /**
@@ -787,7 +787,7 @@
          * @desc Pan to the user's location on the Map.
          */
         _locateUser: function () {
-            this.options.mappy.map.locate({setView: true, maxZoom: this.options.mappy.map.getZoom()});
+            
         },
 
         /**
