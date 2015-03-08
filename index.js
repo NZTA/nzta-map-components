@@ -571,11 +571,59 @@
 
         /**
          * @func initialize
+         * @param {object} options
+         * @param {object} options.vent - Backbone.Wreqr instance.
+         * @param {object} options.map - Leaflet map instance.
          * @override
          */
         initialize: function () {
             this.model = new NZTAComponents.MapModel();
-        }
+
+            this.listenTo(this.options.vent, 'userControls.zoomIn', function () {
+                this._zoomIn();
+            }, this);
+
+            this.listenTo(this.options.vent, 'userControls.zoomOut', function () {
+                this._zoomOut();
+            }, this);
+
+            this.listenTo(this.options.vent, 'userControls.locateUser', function () {
+                this._locateUser();
+            }, this);
+        },
+
+        /**
+         * @func _zoomIn
+         * @desc Zoom the map in one level.
+         */
+        _zoomIn: function () {
+            this.options.map.zoomIn();
+        },
+
+        /**
+         * @func _zoomOut
+         * @desc Zoom the map out one level.
+         */
+        _zoomOut: function () {
+            this.options.map.zoomOut();
+        },
+
+        /**
+         * @func _locateUser
+         * @desc Move the map to the user's current location.
+         */
+        _locateUser: function () {
+            this.options.map.locate({ setView: true, maxZoom: this.options.map.getZoom() });
+        },
+
+        /**
+         * @func _setMapBounds
+         * @param {array} bounds - E.g. [ [654.321, 123.456], [654.321, 123.456] ]
+         * @desc Set the map's bounds.
+         */
+        _setMapBounds: function (bounds) {
+            this.options.map.fitBounds(bounds);
+        },
 
     });
     Cocktail.mixin(NZTAComponents.MapView, eventsMixin, browserHelpersMixin);
@@ -757,29 +805,19 @@
         },
 
         /**
-         * @func onRender
-         * @override
-         */
-        onRender: function () {
-            
-        },
-
-        /**
          * @func _zoomIn
-         * @param {object} e - Event object.
          * @desc Zooms the Map in.
          */
-        _zoomIn: function (e) {
-            
+        _zoomIn: function () {
+            this.options.vent.trigger('userControls.zoomIn');
         },
 
         /**
          * @func _zoomOut
-         * @param {object} e - Event object.
          * @desc Zooms the Map out.
          */
-        _zoomOut: function (e) {
-            
+        _zoomOut: function () {
+            this.options.vent.trigger('userControls.zoomOut');
         },
 
         /**
@@ -787,7 +825,7 @@
          * @desc Pan to the user's location on the Map.
          */
         _locateUser: function () {
-            
+            this.options.vent.trigger('userControls.locateUser');
         },
 
         /**
