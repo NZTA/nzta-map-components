@@ -540,6 +540,7 @@
     NZTAComponents.MapModel = Backbone.AssociatedModel.extend({
 
         defaults: {
+            polling: false,
             popupFeatureId: null
         },
 
@@ -578,6 +579,55 @@
             return _.filter(this.get(collectionKey).models, function (featureModel) {
                 return featureModel.get('properties').id === featureId;
             })[0];
+        },
+
+        /**
+         * @func _doFetch
+         * @desc Fetch each of the model's collections.
+         * @todo
+         */
+        _doFetch: function () {
+
+        },
+
+        /**
+         * @func _startPolling
+         * @param {integer} [interval] - The number of miliseconds between each fetch (defaults to 60000).
+         * @desc Starts updating the model's collections at a set interval.
+         */
+        _startPolling: function (interval) {
+            var self = this,
+                n = interval || 60000;
+
+            this._doFetch();
+
+            this.pollingInterval = setInterval(function () {
+                self._doFetch();
+            }, n);
+
+            this.set('polling', true);
+        },
+
+        /**
+         * @func _stopPolling
+         * @desc Stops polling the model's collection endpoints.
+         */
+        _stopPolling: function () {
+            clearTimeout(this.pollingInterval);
+
+            this.set('polling', false);
+        },
+
+        /**
+         * @func _togglePolling
+         * @param {integer} [interval] - The number of miliseconds between each fetch (defaults to 60000).
+         */
+        _togglePolling: function (interval) {
+            if (this.get('polling') === false) {
+                this._startPolling(interval);
+            } else {
+                this._stopPolling();
+            }
         }
     });
 
