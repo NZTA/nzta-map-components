@@ -10,6 +10,8 @@
         _ = root._,
         Cocktail = root.Cocktail;
 
+    var geoJsonExtent = require('geojson-extent');
+
     if (Backbone === void 0) {
         Backbone = root.Backbone = require('backbone');
     }
@@ -34,9 +36,9 @@
         Backbone.Marionette = require('backbone.marionette');
     }
 
-    module.exports = factory(Backbone, _, Cocktail);
+    module.exports = factory(Backbone, _, Cocktail, geoJsonExtent);
 
-}(window, function (Backbone, _, Cocktail) {
+}(window, function (Backbone, _, Cocktail, geoJsonExtent) {
 
     var NZTAComponents = {};
 
@@ -470,6 +472,23 @@
     NZTAComponents.GeoJsonModel = Backbone.AssociatedModel.extend({
 
         /**
+         * @func _getBounds
+         * @return {array}
+         * @desc Get the feature's bounds.
+         */
+        _getBounds: function () {
+            var bounds;
+
+            if (this.get('geometry').type === 'Polygon') {
+                bounds = geoJsonExtent.polygon(this.attributes).coordinates[0];
+            } else {
+                bounds = geoJsonExtent(this.attributes);
+            }
+
+            return bounds;
+        },
+
+        /**
          * @func _getDisplayTime
          * @return {string}
          * @desc Get a display friendly string representing the time it will take to travel the feature.
@@ -618,12 +637,36 @@
 
         /**
          * @func _setMapBounds
-         * @param {array} bounds - E.g. [ [654.321, 123.456], [654.321, 123.456] ]
+         * @param {array} northingEasting - E.g. [ [654.321, 123.456], [654.321, 123.456] ]
          * @desc Set the map's bounds.
          */
-        _setMapBounds: function (bounds) {
-            this.options.map.fitBounds(bounds);
+        _setMapBounds: function (northingEasting) {
+            this.options.map.fitBounds(northingEasting);
         },
+
+        /**
+         * @func _moveToFeature
+         * @param {object} geoJsonModel - GeoJsonModel instance.
+         * @desc Center the map on a GeoJsonFeature.
+         */
+        _moveToFeature: function (geoJsonModel) {
+            var bounds = geoJsonModel._getBounds(),
+                northingEasting;
+
+            if (geoJsonModel.get('geometry').type === 'Polygon') {
+                northingEasting = [
+                    [bounds[0][1], bounds[0][0]],
+                    [bounds[2][1], bounds[2][0]]
+                ];
+            } else {
+                northingEasting = [
+                    [bounds[1], bounds[0]],
+                    [bounds[3], bounds[2]]
+                ];
+            }
+
+            this._setMapBounds(northingEasting);
+        }
 
     });
     Cocktail.mixin(NZTAComponents.MapView, eventsMixin, browserHelpersMixin);
