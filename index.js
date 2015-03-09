@@ -598,6 +598,9 @@
         initialize: function () {
             this.model = new NZTAComponents.MapModel();
 
+            // Remove default map controls
+            this.options.map.removeControl(this.options.map.zoomControl);
+
             this.listenTo(this.options.vent, 'userControls.zoomIn', function () {
                 this._zoomIn();
             }, this);
