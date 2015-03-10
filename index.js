@@ -583,11 +583,26 @@
 
         /**
          * @func _doFetch
-         * @desc Fetch each of the model's collections.
-         * @todo
+         * @desc Fetch data for your Map. Override this method on your MapModel.
+         * @example Example _doFetch method. In this example, your MapView would define a listener like, this.listenTo(this.model, 'allDataFetched', function (data) {}).
+         * // _doFetch: function () {
+         * //     var self = this;
+         * //
+         * //     $.when(
+         * //         this.get('collection1').fetch(),
+         * //         this.get('collection2').fetch(),
+         * //         this.get('collection3').fetch()
+         * //     ).done(function (collection1XHR, collection2XHR, collection3XHR) {
+         * //         self.trigger('allDataFetched', {
+         * //             'collection1': self.get('collection1'),
+         * //             'collection2': self.get('collection2'),
+         * //             'collection3': self.get('collection3')
+         * //         });
+         * //     });
+         * // }
          */
         _doFetch: function () {
-
+            throw new Error('You need to define a _doFetch method on your MapModel.');
         },
 
         /**

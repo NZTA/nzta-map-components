@@ -38,6 +38,8 @@
         _ = root._,
         Cocktail = root.Cocktail;
 
+    var geoJsonExtent = require('geojson-extent');
+
     if (Backbone === void 0) {
         Backbone = root.Backbone = require('backbone');
     }
@@ -62,9 +64,9 @@
         Backbone.Marionette = require('backbone.marionette');
     }
 
-    module.exports = factory(Backbone, _, Cocktail);
+    module.exports = factory(Backbone, _, Cocktail, geoJsonExtent);
 
-}(window, function (Backbone, _, Cocktail) {
+}(window, function (Backbone, _, Cocktail, geoJsonExtent) {
 
     var NZTAComponents = {};
 
@@ -498,6 +500,23 @@
     NZTAComponents.GeoJsonModel = Backbone.AssociatedModel.extend({
 
         /**
+         * @func _getBounds
+         * @return {array}
+         * @desc Get the feature's bounds.
+         */
+        _getBounds: function () {
+            var bounds;
+
+            if (this.get('geometry').type === 'Polygon') {
+                bounds = geoJsonExtent.polygon(this.attributes).coordinates[0];
+            } else {
+                bounds = geoJsonExtent(this.attributes);
+            }
+
+            return bounds;
+        },
+
+        /**
          * @func _getDisplayTime
          * @return {string}
          * @desc Get a display friendly string representing the time it will take to travel the feature.
@@ -549,6 +568,7 @@
     NZTAComponents.MapModel = Backbone.AssociatedModel.extend({
 
         defaults: {
+            polling: false,
             popupFeatureId: null
         },
 
@@ -587,6 +607,70 @@
             return _.filter(this.get(collectionKey).models, function (featureModel) {
                 return featureModel.get('properties').id === featureId;
             })[0];
+        },
+
+        /**
+         * @func _doFetch
+         * @desc Fetch data for your Map. Override this method on your MapModel.
+         * @example Example _doFetch method. In this example, your MapView would define a listener like, this.listenTo(this.model, 'allDataFetched', function (data) {}).
+         * // _doFetch: function () {
+         * //     var self = this;
+         * //
+         * //     $.when(
+         * //         this.get('collection1').fetch(),
+         * //         this.get('collection2').fetch(),
+         * //         this.get('collection3').fetch()
+         * //     ).done(function (collection1XHR, collection2XHR, collection3XHR) {
+         * //         self.trigger('allDataFetched', {
+         * //             'collection1': self.get('collection1'),
+         * //             'collection2': self.get('collection2'),
+         * //             'collection3': self.get('collection3')
+         * //         });
+         * //     });
+         * // }
+         */
+        _doFetch: function () {
+            throw new Error('You need to define a _doFetch method on your MapModel.');
+        },
+
+        /**
+         * @func _startPolling
+         * @param {integer} [interval] - The number of miliseconds between each fetch (defaults to 60000).
+         * @desc Starts updating the model's collections at a set interval.
+         */
+        _startPolling: function (interval) {
+            var self = this,
+                n = interval || 60000;
+
+            this._doFetch();
+
+            this.pollingInterval = setInterval(function () {
+                self._doFetch();
+            }, n);
+
+            this.set('polling', true);
+        },
+
+        /**
+         * @func _stopPolling
+         * @desc Stops polling the model's collection endpoints.
+         */
+        _stopPolling: function () {
+            clearTimeout(this.pollingInterval);
+
+            this.set('polling', false);
+        },
+
+        /**
+         * @func _togglePolling
+         * @param {integer} [interval] - The number of miliseconds between each fetch (defaults to 60000).
+         */
+        _togglePolling: function (interval) {
+            if (this.get('polling') === false) {
+                this._startPolling(interval);
+            } else {
+                this._stopPolling();
+            }
         }
     });
 
@@ -606,6 +690,9 @@
          */
         initialize: function () {
             this.model = new NZTAComponents.MapModel();
+
+            // Remove default map controls
+            this.options.map.removeControl(this.options.map.zoomControl);
 
             this.listenTo(this.options.vent, 'userControls.zoomIn', function () {
                 this._zoomIn();
@@ -646,12 +733,36 @@
 
         /**
          * @func _setMapBounds
-         * @param {array} bounds - E.g. [ [654.321, 123.456], [654.321, 123.456] ]
+         * @param {array} northingEasting - E.g. [ [654.321, 123.456], [654.321, 123.456] ]
          * @desc Set the map's bounds.
          */
-        _setMapBounds: function (bounds) {
-            this.options.map.fitBounds(bounds);
+        _setMapBounds: function (northingEasting) {
+            this.options.map.fitBounds(northingEasting);
         },
+
+        /**
+         * @func _moveToFeature
+         * @param {object} geoJsonModel - GeoJsonModel instance.
+         * @desc Center the map on a GeoJsonFeature.
+         */
+        _moveToFeature: function (geoJsonModel) {
+            var bounds = geoJsonModel._getBounds(),
+                northingEasting;
+
+            if (geoJsonModel.get('geometry').type === 'Polygon') {
+                northingEasting = [
+                    [bounds[0][1], bounds[0][0]],
+                    [bounds[2][1], bounds[2][0]]
+                ];
+            } else {
+                northingEasting = [
+                    [bounds[1], bounds[0]],
+                    [bounds[3], bounds[2]]
+                ];
+            }
+
+            this._setMapBounds(northingEasting);
+        }
 
     });
     Cocktail.mixin(NZTAComponents.MapView, eventsMixin, browserHelpersMixin);
@@ -900,7 +1011,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Mon Mar 09 2015 11:51:22 GMT+1300 (NZDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Wed Mar 11 2015 11:52:00 GMT+1300 (NZDT)
 </footer>
 
 <script> prettyPrint(); </script>
