@@ -663,6 +663,8 @@
         initialize: function () {
             this.model = new NZTAComponents.MapModel();
 
+            this.geoJsonLayers = [];
+
             // Remove default map controls
             this.options.map.removeControl(this.options.map.zoomControl);
 
@@ -676,6 +678,10 @@
 
             this.listenTo(this.options.vent, 'userControls.locateUser', function () {
                 this._locateUser();
+            }, this);
+
+            this.listenTo(this.options.vent, 'userControls.toggleMapLayer', function (layerName) {
+                this._toggleMapLayer(layerName);
             }, this);
         },
 
@@ -734,6 +740,90 @@
             }
 
             this._setMapBounds(northingEasting);
+        },
+
+        /**
+         * @func _toggleMapLayer
+         * @param {string} layerId - The name of the layer to add / remove.
+         * @desc Add / remove a layer from the map.
+         */
+        _toggleMapLayer: function (layerId) {
+            var layer;
+
+            if (layerId === void 0) {
+                return;
+            }
+
+            layer = _.findWhere(this.geoJsonLayers, { id: layerId });
+
+            if (layer !== void 0 && layer.markerClusterGroup !== null) {
+                this._removeMapLayer(layerId);
+            } else {
+                this._addMapLayer(layerId);
+            }
+        },
+
+        /**
+         * @func _addMapLayer
+         * @param {string} layerId - The ID of the layer as it would be in this.geoJsonLayers.
+         * @example The layerId should match the GeoJsonCollection name.
+         * // 'cameras'
+         */
+        _addMapLayer: function (layerId) {
+            var geoJsonCollection = this.model.get(layerId),
+                geoJsonLayer = _.findWhere(this.geoJsonLayers, { id: layerId }) || {},
+                geoJson;
+
+            if (geoJsonCollection.excludeFromMap || layerId === void 0) {
+                return;
+            }
+
+            // Remove the current cluster group if it exists, so we don't end up with
+            // multiple cluster groups displaying the same data.
+            if (!_.isEmpty(geoJsonLayer) && geoJsonLayer.markerClusterGroup !== null) {
+                this._removeMapLayer(geoJsonLayer.id);
+            }
+
+            geoJsonLayer.id = layerId;
+            geoJsonLayer.visible = true;
+            geoJsonLayer.markerClusterGroup = L.markerClusterGroup();
+
+            geoJson = L.geoJson(null, {
+                // Add a click handler to each feature marker.
+                onEachFeature: function (feature, layer) {
+                    layer.on('click', function () {
+                        NZTAComponents.router._previousFragment = Backbone.history.fragment;
+                        NZTAComponents.router.navigate(feature.properties.featureType + '/' + feature.properties.id, { trigger: true });
+                    });
+                }
+            });
+
+            // Add each geoJson feature to the new layer.
+            _.each(geoJsonCollection.models, function (geoJsonModel) {
+                geoJson.addData(geoJsonModel.attributes);
+            });
+
+            geoJsonLayer.markerClusterGroup.addLayer(geoJson);
+
+            this.options.map.addLayer(geoJsonLayer.markerClusterGroup);
+
+            this.geoJsonLayers.push(geoJsonLayer);
+        },
+
+        /**
+         * @func _addMapLayer
+         * @param {string} layerId - The ID of the layer in this.geoJsonLayers you want to remove.
+         * @example The layerId should match the GeoJsonCollection collection name.
+         * // 'cameras'
+         */
+        _removeMapLayer: function (layerId) {
+            var geoJsonLayer = _.findWhere(this.geoJsonLayers, { id: layerId });
+
+            // Remove the layer from the map.
+            this.options.map.removeLayer(geoJsonLayer.markerClusterGroup);
+
+            // Remove the layer from within our geoJsonLayers list.
+            geoJsonLayer.markerClusterGroup = null;
         }
 
     });
@@ -856,6 +946,12 @@
      */
     NZTAComponents.UserControlsView = Backbone.Marionette.ItemView.extend({
 
+        initialize: function () {
+            this.model = new Backbone.Model({
+                mapLayerFiltersOpen: false
+            });
+        },
+
         template: _.template('\
             <div class="map-controls"> \
                 <div class="section--view-type-nav"> \
@@ -895,7 +991,7 @@
                     </ul> \
                     <ul class="map-nav--icon"> \
                         <li class="map-nav__item toggle-tools"> \
-                            <a href="javascript:void(0)" class="" id="viewOptions"> \
+                            <a href="javascript:void(0)" class="" id="mapLayerFilters"> \
                                 <i class="i i-map-cog"></i> \
                                 <span class="sr-only">View options</span> \
                             </a> \
@@ -910,9 +1006,10 @@
             'click #zoomIn': '_zoomIn',
             'click #zoomOut': '_zoomOut',
             'click #locate': '_locateUser',
-            'click #viewOptions': '_toggleLayerOptions',
+            'click #mapLayerFilters': '_toggleMapLayerFilters',
             'click #mobile-control-map-button': '_handleMobileControlMapButton',
-            'click #mobile-control-list-button': '_handleMobileControlListButton'
+            'click #mobile-control-list-button': '_handleMobileControlListButton',
+            'click .map-layer-filter': '_toggleMapLayer'
         },
 
         /**
@@ -940,11 +1037,23 @@
         },
 
         /**
-         * @func _toggleLayerOptions
+         * @func _toggleMapLayerFilters
          * @desc Shows / hides the layer checkboxes.
          */
-        _toggleLayerOptions: function () {
+        _toggleMapLayerFilters: function () {
+            // Toggle the mapLayerFiltersOpen value.
+            this.model.set('mapLayerFiltersOpen', this.model.get('mapLayerFiltersOpen') === false);
+
             $('body').toggleClass('tools-active');
+        },
+
+        /**
+         * @func _toggleMapLayer
+         * @param {object} e - An event object.
+         * @desc Trigger an events which toggles a map layer.
+         */
+        _toggleMapLayer: function (e) {
+            this.options.vent.trigger('userControls.toggleMapLayer', Backbone.$(e.currentTarget).data('layer'));
         },
 
         /**
