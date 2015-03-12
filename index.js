@@ -1002,7 +1002,7 @@
          * @param {object} [options.model] - Backbone.Model instance.
          */
         initialize: function (options) {
-            this.model = options.model || new Backbone.Model();
+            this.model = (options !== void 0 && options.model !== void 0) ? options.model : new Backbone.Model();
 
             this.model.set('mapLayerFiltersOpen', false);
         },
