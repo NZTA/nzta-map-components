@@ -87,7 +87,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line535">line 535</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line547">line 547</a>
     </li></ul></dd>
     
 
@@ -199,7 +199,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line584">line 584</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line572">line 572</a>
     </li></ul></dd>
     
 
@@ -236,9 +236,9 @@
 //         this.collection3.fetch()
 //     ).done(function (collection1XHR, collection2XHR, collection3XHR) {
 //         self.trigger('allDataFetched', {
-//             'collection1': self.collection1,
-//             'collection2': self.collection2,
-//             'collection3': self.collection3
+//             collection1: self.collection1,
+//             collection2: self.collection2,
+//             collection3: self.collection3
 //         });
 //     });
 // }</code></pre>
@@ -373,7 +373,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line571">line 571</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line559">line 559</a>
     </li></ul></dd>
     
 
@@ -401,295 +401,6 @@
         
 <div class="param-desc">
     GeoJSON feature.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~_populateCollection"><span class="type-signature">(inner) </span>_populateCollection<span class="signature">(collectionKey, features, filter<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {object}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Populate a collection on MapModel with a set of GeoJSON features.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>collectionKey</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The key on MapModel to populate.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>features</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">GeoJSON features to populate the collection with.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>filter</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Filter features by key/value.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>filter.key</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Match against this key on the feature's `properties`.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>filter.value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Only populate the collection with features who's `filter.key` match this value.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line547">line 547</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The collection.
 </div>
 
 
@@ -827,7 +538,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line608">line 608</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line596">line 596</a>
     </li></ul></dd>
     
 
@@ -909,7 +620,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line626">line 626</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line614">line 614</a>
     </li></ul></dd>
     
 
@@ -1048,7 +759,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line636">line 636</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line624">line 624</a>
     </li></ul></dd>
     
 
@@ -1096,7 +807,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Mar 12 2015 16:38:33 GMT+1300 (NZDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Mar 12 2015 21:52:02 GMT+1300 (NZDT)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -6,31 +6,11 @@ var Backbone = require('backbone'),
 describe('MapModel', function () {
     var mapModel;
 
-    describe('_populateCollection', function () {
-        beforeEach(function () {
-            mapModel = new NZTAComponents.MapModel({
-                featureCollection: new Backbone.Collection()
-            });
-        });
-
-        it('should populate a collection with a complete list of features', function () {
-            mapModel._populateCollection('featureCollection', features);
-            expect(mapModel.get('featureCollection').models.length).to.be(features.length);
-        });
-
-        it('should populate a collection with a filtered list of features', function () {
-            mapModel._populateCollection('featureCollection', features, { key: 'impact', value: 'Road Closed' });
-            expect(mapModel.get('featureCollection').models.length).to.be(12);
-        });
-    });
-
     describe('_getFeatureTypeById', function () {
         beforeEach(function () {
-            mapModel = new NZTAComponents.MapModel({
-                featureCollection: new Backbone.Collection()
-            });
-
-            mapModel._populateCollection('featureCollection', features);
+            mapModel = new NZTAComponents.MapModel();
+            mapModel.featureCollection = new Backbone.Collection();
+            mapModel.featureCollection.set(features);
         });
 
         it('should return a feature matching the provided ID', function () {

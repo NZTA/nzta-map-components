@@ -73,6 +73,13 @@
                     this._onRoute(handler, params);
                 }
             }, this);
+
+            // Add hook for new data becoming available.
+            this.listenTo(this.options.vent, 'map.update.all', function (features) {
+                if (typeof this._onMapData === 'function') {
+                    this._onMapData(features);
+                }
+            }, this);
         }
     };
 
@@ -108,7 +115,11 @@
     /**
      * @module DrillDownMenuView
      * @extends Marionette.LayoutView
+     * @param {object} vent - Backbone.Wreqr.EventAggregator instance.
+     * @param {function} defaultPanel - Constructor for the panel shown by default.
+     * @param {string} defaultCollectionKey - The key of the collection to display by default.
      * @desc Top level component for creating a Drill Down Menu. Has child {@link DrillDownPanelView} components.
+     * @todo Look at refactoring the DrillDownMenu component. DrillDownMenuPanels would be more flexible as LayoutViews.
      */
     NZTAComponents.DrillDownMenuView = Backbone.Marionette.LayoutView.extend({
 
@@ -116,6 +127,7 @@
          * @func initialize
          * @override
          * @param {object} options
+         * @param {object} options.model - Backbone.Model instance.
          */
         initialize: function (options) {
             var defaultPanel;
@@ -124,10 +136,7 @@
 
             defaultPanel = this._createPanel(options.defaultPanel, options.defaultCollectionKey);
 
-            // If there's no model defined by the inheriting class, set up a default.
-            if (this.model === void 0) {
-                this.model = new Backbone.Model();
-            }
+            this.model = this.options.model || new Backbone.Model();
 
             this.model.set({
                 baseUrlSegment: this.options.baseUrlSegment || '',
@@ -287,9 +296,9 @@
 
             // Populate the panel's collection
             if (collectionFilter !== void 0) {
-                models = this._getRelationsForFeature(this.model.get(collectionKey).models, collectionFilter.key, collectionFilter.value);
+                models = this._getRelationsForFeature(this.model[collectionKey].models, collectionFilter.key, collectionFilter.value);
             } else {
-                models = this.model.get(collectionKey).models;
+                models = this.model[collectionKey].models;
             }
             panelView.collection.add(models);
 
@@ -303,6 +312,7 @@
     /**
      * @module DrillDownPanelView
      * @extends Marionette.CompositeView
+     * @param {object} vent - Backbone.Wreqr.EventAggregator instance.
      * @desc A sub-component used to create Drill Down Menus. Child of {@link DrillDownMenuView}. Has {@link DrillDownItemView} child components.
      */
     NZTAComponents.DrillDownPanelView = Backbone.Marionette.CompositeView.extend({
@@ -328,11 +338,13 @@
 
         /**
          * @func initialize
-         * @override
+         * @param {object} [options]
+         * @param {object} [options.model] - Backbone.Model instance.
+         * @param {object} [options.collection] - Backbone.Collection instance.
          */
-        initialize: function () {
-            this.model = new Backbone.Model();
-            this.collection = new Backbone.Collection();
+        initialize: function (options) {
+            this.model = options.model || new Backbone.Model();
+            this.collection = options.collection || new Backbone.Collection();
 
             // Automatically re-render the view when the collection changes.
             this.listenTo(this.collection, 'change', function () {
@@ -545,30 +557,6 @@
         },
 
         /**
-         * @func _populateCollection
-         * @param {string} collectionKey - The key on MapModel to populate.
-         * @param {array} features - GeoJSON features to populate the collection with.
-         * @param {object} [filter] - Filter features by key/value.
-         * @param {string} filter.key - Match against this key on the feature's `properties`.
-         * @param {string} filter.value - Only populate the collection with features who's `filter.key` match this value.
-         * @return {object} The collection.
-         * @desc Populate a collection on MapModel with a set of GeoJSON features.
-         */
-        _populateCollection: function (collectionKey, features, filter) {
-            var collection = this.get(collectionKey);
-
-            if (filter !== void 0) {
-                collection.set(_.filter(features, function (feature) {
-                    return feature.properties[filter.key] === filter.value;
-                }));
-            } else {
-                collection.set(features);
-            }
-
-            return collection;
-        },
-
-        /**
          * @func _getFeatureTypeById
          * @param {string} collectionKey - MapModel key where the collection is.
          * @param {string} featureId - ID of the feature you want.
@@ -576,7 +564,7 @@
          * @desc Get a feature model ID.
          */
         _getFeatureTypeById: function (collectionKey, featureId) {
-            return _.filter(this.get(collectionKey).models, function (featureModel) {
+            return _.filter(this[collectionKey].models, function (featureModel) {
                 return featureModel.get('properties').id === featureId;
             })[0];
         },
@@ -594,9 +582,9 @@
          * //         this.collection3.fetch()
          * //     ).done(function (collection1XHR, collection2XHR, collection3XHR) {
          * //         self.trigger('allDataFetched', {
-         * //             'collection1': self.collection1,
-         * //             'collection2': self.collection2,
-         * //             'collection3': self.collection3
+         * //             collection1: self.collection1,
+         * //             collection2: self.collection2,
+         * //             collection3: self.collection3
          * //         });
          * //     });
          * // }
@@ -649,6 +637,8 @@
     /**
      * @module MapView
      * @extends Marionette.ItemView
+     * @param {object} vent - Backbone.Wreqr.EventAggregator instance.
+     * @param {object} map - Leaflet map instance.
      * @desc Used for displaying the Map.
      */
     NZTAComponents.MapView = Backbone.Marionette.ItemView.extend({
@@ -656,12 +646,12 @@
         /**
          * @func initialize
          * @param {object} options
-         * @param {object} options.vent - Backbone.Wreqr instance.
-         * @param {object} options.map - Leaflet map instance.
+         * @param {object} options.model - Backbone.Model instance.
          * @override
          */
-        initialize: function () {
-            this.model = new NZTAComponents.MapModel();
+        initialize: function (options) {
+
+            this.model = options.model || new NZTAComponents.MapModel();
 
             this.mapLayers = [];
 
@@ -682,6 +672,10 @@
 
             this.listenTo(this.options.vent, 'userControls.toggleMapLayer', function (layerName) {
                 this._toggleMapLayer(layerName);
+            }, this);
+
+            this.listenTo(this.model, 'data.all', function (features) {
+                this.options.vent.trigger('map.update.all', features);
             }, this);
         },
 
@@ -843,10 +837,6 @@
             var geoJsonCollection = this.model[layerId],
                 mapLayer = {};
 
-            if (geoJsonCollection.excludeFromMap || layerId === void 0) {
-                return;
-            }
-
             mapLayer.id = layerId;
             mapLayer.markers = L.markerClusterGroup({ showCoverageOnHover: false });
 
@@ -872,7 +862,14 @@
 
         _mapLayerVisible: function (layerId) {
             var mapLayer = this._getMapLayerById(layerId),
-                markersArray = mapLayer.markers.getLayers();
+                markersArray;
+
+            // If the layer doesn't exist, it's not visible.
+            if (mapLayer === void 0) {
+                return false;
+            }
+
+            markersArray = mapLayer.markers.getLayers();
 
             return mapLayer !== void 0 && markersArray.length > 0;
         }
@@ -905,6 +902,7 @@
     /**
      * @module PopupView
      * @extends Marionette.LayoutView
+     * @param {object} vent - Backbone.Wreqr.EventAggregator instance.
      * @desc Used for displaying detailed information about a Map feature.
      */
     NZTAComponents.PopupView = Backbone.Marionette.LayoutView.extend({
@@ -915,10 +913,11 @@
 
         /**
          * @func initialize
-         * @override
+         * @param {object} [options]
+         * @param {object} [options.model] - Backbone.Model instance.
          */
-        initialize: function () {
-            this.model = new NZTAComponents.PopupModel();
+        initialize: function (options) {
+            this.model = options.model || new NZTAComponents.PopupModel();
         },
 
         /**
@@ -993,14 +992,20 @@
     /**
      * @module UserControlsView
      * @extends Marionette.ItemView
+     * @param {object} vent - Backbone.Wreqr.EventAggregator instance.
      * @desc User controls for the Map.
      */
     NZTAComponents.UserControlsView = Backbone.Marionette.ItemView.extend({
 
-        initialize: function () {
-            this.model = new Backbone.Model({
-                mapLayerFiltersOpen: false
-            });
+        /**
+         * @func initialize
+         * @param {object} [options]
+         * @param {object} [options.model] - Backbone.Model instance.
+         */
+        initialize: function (options) {
+            this.model = options.model || new Backbone.Model();
+
+            this.model.set('mapLayerFiltersOpen', false);
         },
 
         template: _.template('\
