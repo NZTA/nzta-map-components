@@ -403,6 +403,20 @@
      * @desc For dealing with {@link GeoJsonModel} models.
      */
     NZTAComponents.GeoJsonCollection = Backbone.Collection.extend({
+
+        /**
+         * @function initialize
+         */
+        initialize: function (options) {
+            this._clusterRadius = (options !== void 0 && options.radius !== void 0) ? options.radius : 8;
+            this._clusterFillColor = (options !== void 0 && options.fillColor !== void 0) ? options.fillColor : '#fff';
+            this._clusterColor = (options !== void 0 && options.color !== void 0) ? options.color : '#000';
+            this._clusterWeight = (options !== void 0 && options.weight !== void 0) ? options.weight : 1;
+            this._clusterOpacity = (options !== void 0 && options.opacity !== void 0) ? options.opacity : 1;
+            this._clusterFillOpacity = (options !== void 0 && options.fillOpacity !== void 0) ? options.fillOpacity : 0.8;
+            this._iconClass = (options !== void 0 && options.iconClass !== void 0) ? options.iconClass : 'cluster-icon';
+        },
+
         /**
          * @func fetch
          * @override
@@ -838,7 +852,14 @@
                 mapLayer = {};
 
             mapLayer.id = layerId;
-            mapLayer.markers = L.markerClusterGroup({ showCoverageOnHover: false });
+            mapLayer.markers = L.markerClusterGroup({ 
+                showCoverageOnHover: false,
+                iconCreateFunction: function (cluster) {
+                    var html = '<div class="' + geoJsonCollection._iconClass + '"><div class="cluster-count">' + cluster.getChildCount() + '</div></div>';
+
+                    return L.divIcon({html: html});
+                }
+            });
 
             this.options.map.addLayer(mapLayer.markers);
 
