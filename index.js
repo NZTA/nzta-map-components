@@ -857,7 +857,6 @@
             var geoJsonLayer = this._getMapLayerById(layerId);
 
             geoJsonLayer.markers.clearLayers();
-            geoJsonLayer.markers.clearAllEventListeners();
         },
 
         _mapLayerVisible: function (layerId) {
