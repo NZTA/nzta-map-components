@@ -203,7 +203,7 @@
 
             
 
-            <td class="description last">The ID of the layer in this.geoJsonLayers you want to remove.</td>
+            <td class="description last">The ID of the layer in this.mapLayers you want to remove.</td>
         </tr>
 
     
@@ -244,7 +244,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line813">line 813</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line860">line 860</a>
     </li></ul></dd>
     
 
@@ -336,7 +336,7 @@
 
             
 
-            <td class="description last">The ID of the layer as it would be in this.geoJsonLayers.</td>
+            <td class="description last">The ID of the layer as it would be in this.mapLayers.</td>
         </tr>
 
     
@@ -377,7 +377,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line766">line 766</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line836">line 836</a>
     </li></ul></dd>
     
 
@@ -406,6 +406,137 @@
     
     <pre class="prettyprint"><code>The layerId should match the GeoJsonCollection name.
 // 'cameras'</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~_getMapLayerById"><span class="type-signature">(inner) </span>_getMapLayerById<span class="signature">(layerId)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Get a map layer by ID.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>layerId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the map layer you're looking for. Should match a GeoJsonCollection name e.g. 'cameras'.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line765">line 765</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -465,7 +596,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line704">line 704</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line724">line 724</a>
     </li></ul></dd>
     
 
@@ -596,7 +727,138 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line721">line 721</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line741">line 741</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~_onMapData"><span class="type-signature">(inner) </span>_onMapData<span class="signature">(features)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Called when new map data is available as a result of MapModel._doFetch().
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>features</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Key value pairs of GeoJsonCollections.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line688">line 688</a>
     </li></ul></dd>
     
 
@@ -727,7 +989,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line712">line 712</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line732">line 732</a>
     </li></ul></dd>
     
 
@@ -817,7 +1079,7 @@
 
             
 
-            <td class="description last">The name of the layer to add / remove.</td>
+            <td class="description last">The ID of the layer to add / remove.</td>
         </tr>
 
     
@@ -858,7 +1120,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line745">line 745</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line774">line 774</a>
     </li></ul></dd>
     
 
@@ -881,6 +1143,150 @@
 
 
 
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~_updateMapLayer"><span class="type-signature">(inner) </span>_updateMapLayer<span class="signature">(layerId)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Update an existing map layer with new data.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>layerId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the layer to update.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line795">line 795</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>Data is retrieved from MapModel, so layerId should match the MapModel property name where your GeoJsonCollection is stored.
+// ...
+//
+// mapModel.cameras = new NZTAComponents.GeoJsonCollection();
+// mapModel.cameras.fetch();
+// 
+// ...
+//
+// this._updateMapLayer('cameras'); // the 'cameras' layer is updated with data from mapModel.cameras</code></pre>
 
 
 
@@ -940,7 +1346,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line688">line 688</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line708">line 708</a>
     </li></ul></dd>
     
 
@@ -1022,7 +1428,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line696">line 696</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line716">line 716</a>
     </li></ul></dd>
     
 
@@ -1269,7 +1675,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Wed Mar 11 2015 18:06:23 GMT+1300 (NZDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Mar 12 2015 16:38:33 GMT+1300 (NZDT)
 </footer>
 
 <script> prettyPrint(); </script>

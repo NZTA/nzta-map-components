@@ -562,10 +562,10 @@
 
     /**
      * @module MapModel
-     * @extends Backbone.AssociatedModel
+     * @extends Backbone.Model
      * @desc The model for {@link MapView}.
      */
-    NZTAComponents.MapModel = Backbone.AssociatedModel.extend({
+    NZTAComponents.MapModel = Backbone.Model.extend({
 
         defaults: {
             polling: false,
@@ -617,14 +617,14 @@
          * //     var self = this;
          * //
          * //     $.when(
-         * //         this.get('collection1').fetch(),
-         * //         this.get('collection2').fetch(),
-         * //         this.get('collection3').fetch()
+         * //         this.collection1.fetch(),
+         * //         this.collection2.fetch(),
+         * //         this.collection3.fetch()
          * //     ).done(function (collection1XHR, collection2XHR, collection3XHR) {
          * //         self.trigger('allDataFetched', {
-         * //             'collection1': self.get('collection1'),
-         * //             'collection2': self.get('collection2'),
-         * //             'collection3': self.get('collection3')
+         * //             'collection1': self.collection1,
+         * //             'collection2': self.collection2,
+         * //             'collection3': self.collection3
          * //         });
          * //     });
          * // }
@@ -691,7 +691,7 @@
         initialize: function () {
             this.model = new NZTAComponents.MapModel();
 
-            this.geoJsonLayers = [];
+            this.mapLayers = [];
 
             // Remove default map controls
             this.options.map.removeControl(this.options.map.zoomControl);
@@ -710,6 +710,26 @@
 
             this.listenTo(this.options.vent, 'userControls.toggleMapLayer', function (layerName) {
                 this._toggleMapLayer(layerName);
+            }, this);
+        },
+
+        /**
+         * @func _onMapData
+         * @param {object} features - Key value pairs of GeoJsonCollections.
+         * @desc Called when new map data is available as a result of MapModel._doFetch().
+         */
+        _onMapData: function (features) {
+            // Add a map layer for each feature set.
+            _.each(features, function (geoJsonCollection, key) {
+                var mapLayer = this._getMapLayerById(key);
+
+                if (mapLayer === void 0) {
+                    // The map layer doesn't exist yet, so create it.
+                    this._addMapLayer(key);
+                } else if (this._mapLayerVisible(key)) {
+                    // The map layer exists and has not been turned off by the user, so update the markers.
+                    this._updateMapLayer(key);
+                }
             }, this);
         },
 
@@ -771,8 +791,17 @@
         },
 
         /**
+         * @func _getMapLayerById
+         * @param {string} layerId - The ID of the map layer you're looking for. Should match a GeoJsonCollection name e.g. 'cameras'.
+         * @desc Get a map layer by ID.
+         */
+        _getMapLayerById: function (layerId) {
+            return _.findWhere(this.mapLayers, { id: layerId });
+        },
+
+        /**
          * @func _toggleMapLayer
-         * @param {string} layerId - The name of the layer to add / remove.
+         * @param {string} layerId - The ID of the layer to add / remove.
          * @desc Add / remove a layer from the map.
          */
         _toggleMapLayer: function (layerId) {
@@ -782,41 +811,39 @@
                 return;
             }
 
-            layer = _.findWhere(this.geoJsonLayers, { id: layerId });
+            layer = this._getMapLayerById(layerId);
 
-            if (layer !== void 0 &amp;&amp; layer.markerClusterGroup !== null) {
+            if (this._mapLayerVisible(layerId)) {
                 this._removeMapLayer(layerId);
             } else {
-                this._addMapLayer(layerId);
+                this._updateMapLayer(layerId);
             }
         },
 
         /**
-         * @func _addMapLayer
-         * @param {string} layerId - The ID of the layer as it would be in this.geoJsonLayers.
-         * @example The layerId should match the GeoJsonCollection name.
-         * // 'cameras'
+         * @func _updateMapLayer
+         * @param {string} layerId - The ID of the layer to update.
+         * @desc Update an existing map layer with new data.
+         * @example Data is retrieved from MapModel, so layerId should match the MapModel property name where your GeoJsonCollection is stored.
+         * // ...
+         * //
+         * // mapModel.cameras = new NZTAComponents.GeoJsonCollection();
+         * // mapModel.cameras.fetch();
+         * // 
+         * // ...
+         * //
+         * // this._updateMapLayer('cameras'); // the 'cameras' layer is updated with data from mapModel.cameras
          */
-        _addMapLayer: function (layerId) {
-            var geoJsonCollection = this.model.get(layerId),
-                geoJsonLayer = _.findWhere(this.geoJsonLayers, { id: layerId }) || {},
-                geoJson;
-
-            if (geoJsonCollection.excludeFromMap || layerId === void 0) {
-                return;
-            }
+        _updateMapLayer: function (layerId) {
+            var geoJsonCollection = this.model[layerId],
+                mapLayer = this._getMapLayerById(layerId),
+                geoJsonLayer;
 
             // Remove the current cluster group if it exists, so we don't end up with
             // multiple cluster groups displaying the same data.
-            if (!_.isEmpty(geoJsonLayer) &amp;&amp; geoJsonLayer.markerClusterGroup !== null) {
-                this._removeMapLayer(geoJsonLayer.id);
-            }
+            this._removeMapLayer(layerId);
 
-            geoJsonLayer.id = layerId;
-            geoJsonLayer.visible = true;
-            geoJsonLayer.markerClusterGroup = L.markerClusterGroup();
-
-            geoJson = L.geoJson(null, {
+            geoJsonLayer = L.geoJson(null, {
                 // Add a click handler to each feature marker.
                 onEachFeature: function (feature, layer) {
                     layer.on('click', function () {
@@ -828,30 +855,54 @@
 
             // Add each geoJson feature to the new layer.
             _.each(geoJsonCollection.models, function (geoJsonModel) {
-                geoJson.addData(geoJsonModel.attributes);
+                geoJsonLayer.addData(geoJsonModel.attributes);
             });
 
-            geoJsonLayer.markerClusterGroup.addLayer(geoJson);
-
-            this.options.map.addLayer(geoJsonLayer.markerClusterGroup);
-
-            this.geoJsonLayers.push(geoJsonLayer);
+            mapLayer.markers.addLayer(geoJsonLayer);
         },
 
         /**
          * @func _addMapLayer
-         * @param {string} layerId - The ID of the layer in this.geoJsonLayers you want to remove.
+         * @param {string} layerId - The ID of the layer as it would be in this.mapLayers.
+         * @example The layerId should match the GeoJsonCollection name.
+         * // 'cameras'
+         */
+        _addMapLayer: function (layerId) {
+            var geoJsonCollection = this.model[layerId],
+                mapLayer = {};
+
+            if (geoJsonCollection.excludeFromMap || layerId === void 0) {
+                return;
+            }
+
+            mapLayer.id = layerId;
+            mapLayer.markers = L.markerClusterGroup({ showCoverageOnHover: false });
+
+            this.options.map.addLayer(mapLayer.markers);
+
+            this.mapLayers.push(mapLayer);
+
+            this._updateMapLayer(layerId);
+        },
+
+        /**
+         * @func _addMapLayer
+         * @param {string} layerId - The ID of the layer in this.mapLayers you want to remove.
          * @example The layerId should match the GeoJsonCollection collection name.
          * // 'cameras'
          */
         _removeMapLayer: function (layerId) {
-            var geoJsonLayer = _.findWhere(this.geoJsonLayers, { id: layerId });
+            var geoJsonLayer = this._getMapLayerById(layerId);
 
-            // Remove the layer from the map.
-            this.options.map.removeLayer(geoJsonLayer.markerClusterGroup);
+            geoJsonLayer.markers.clearLayers();
+            geoJsonLayer.markers.clearAllEventListeners();
+        },
 
-            // Remove the layer from within our geoJsonLayers list.
-            geoJsonLayer.markerClusterGroup = null;
+        _mapLayerVisible: function (layerId) {
+            var mapLayer = this._getMapLayerById(layerId),
+                markersArray = mapLayer.markers.getLayers();
+
+            return mapLayer !== void 0 &amp;&amp; markersArray.length > 0;
         }
 
     });
@@ -1120,7 +1171,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Wed Mar 11 2015 18:06:23 GMT+1300 (NZDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Mar 12 2015 16:38:33 GMT+1300 (NZDT)
 </footer>
 
 <script> prettyPrint(); </script>
