@@ -656,10 +656,13 @@
      * @module MapView
      * @extends Marionette.ItemView
      * @param {object} vent - Backbone.Wreqr.EventAggregator instance.
-     * @param {object} map - Leaflet map instance.
      * @desc Used for displaying the Map.
      */
     NZTAComponents.MapView = Backbone.Marionette.ItemView.extend({
+
+        el: '#map',
+
+        template: false,
 
         /**
          * @func initialize
@@ -672,6 +675,8 @@
             this.model = options.model || new NZTAComponents.MapModel();
 
             this.mapLayers = [];
+
+            this._addMap();
 
             // Remove default map controls
             this.options.map.removeControl(this.options.map.zoomControl);
@@ -695,6 +700,18 @@
             this.listenTo(this.model, 'data.all', function (features) {
                 this.options.vent.trigger('map.update.all', features);
             }, this);
+        },
+
+        _addMap: function () {
+            var map = L.map('map').setView([-40.866119, 174.143780], 5);
+
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 18,
+                zIndex: 10
+            }).addTo(map);
+
+            this.options.map = map;
         },
 
         /**
