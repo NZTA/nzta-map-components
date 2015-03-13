@@ -415,6 +415,9 @@
             this._clusterOpacity = (options !== void 0 && options.opacity !== void 0) ? options.opacity : 1;
             this._clusterFillOpacity = (options !== void 0 && options.fillOpacity !== void 0) ? options.fillOpacity : 0.8;
             this._iconClass = (options !== void 0 && options.iconClass !== void 0) ? options.iconClass : 'cluster-icon';
+            this._iconUrl = (options !== void 0 && options.iconUrl !== void 0) ? options.iconUrl : '';
+            this._iconSize = (options !== void 0 && options.iconSize !== void 0) ? options.iconSize : [26, 34];
+            this._iconAnchor = (options !== void 0 && options.iconAnchor !== void 0) ? options.iconAnchor : [13, 34];
         },
 
         /**
@@ -824,6 +827,15 @@
             this._removeMapLayer(layerId);
 
             geoJsonLayer = L.geoJson(null, {
+                pointToLayer: function(feature, latlng) {
+                    var icon = L.icon({
+                        iconUrl: geoJsonCollection._iconUrl,
+                        iconSize: geoJsonCollection._iconSize,
+                        iconAnchor: geoJsonCollection._iconAnchor
+                    });
+
+                    return L.marker(latlng, { icon: icon });
+                },
                 // Add a click handler to each feature marker.
                 onEachFeature: function (feature, layer) {
                     layer.on('click', function () {
