@@ -637,18 +637,6 @@
             clearTimeout(this.pollingInterval);
 
             this.set('polling', false);
-        },
-
-        /**
-         * @func _togglePolling
-         * @param {integer} [interval] - The number of miliseconds between each fetch (defaults to 60000).
-         */
-        _togglePolling: function (interval) {
-            if (this.get('polling') === false) {
-                this._startPolling(interval);
-            } else {
-                this._stopPolling();
-            }
         }
     });
 
@@ -672,7 +660,7 @@
          */
         initialize: function (options) {
 
-            this.model = options.model || new NZTAComponents.MapModel();
+            this.model = (options !== void 0 && options.model !== void 0) ? options.model : new NZTAComponents.MapModel();
 
             this.mapLayers = [];
 
@@ -691,6 +679,14 @@
 
             this.listenTo(this.options.vent, 'userControls.locateUser', function () {
                 this._locateUser();
+            }, this);
+
+            this.listenTo(this.options.vent, 'userControls.startPolling', function (interval) {
+                this._startPolling(interval);
+            }, this);
+
+            this.listenTo(this.options.vent, 'userControls.stopPolling', function () {
+                this._stopPolling();
             }, this);
 
             this.listenTo(this.options.vent, 'userControls.toggleMapLayer', function (layerName) {
@@ -923,6 +919,14 @@
             markersArray = mapLayer.markers.getLayers();
 
             return mapLayer !== void 0 && markersArray.length > 0;
+        },
+
+        _startPolling: function (interval) {
+            this.model._startPolling(interval);
+        },
+
+        _stopPolling: function () {
+            this.model._stopPolling();
         }
 
     });
