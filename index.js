@@ -418,6 +418,7 @@
             this._iconUrl = (options !== void 0 && options.iconUrl !== void 0) ? options.iconUrl : '';
             this._iconSize = (options !== void 0 && options.iconSize !== void 0) ? options.iconSize : [26, 34];
             this._iconAnchor = (options !== void 0 && options.iconAnchor !== void 0) ? options.iconAnchor : [13, 34];
+            this._style = (options !== void 0 && options.style !== void 0) ? options.style : null;
         },
 
         /**
@@ -842,7 +843,8 @@
                         NZTAComponents.router._previousFragment = Backbone.history.fragment;
                         NZTAComponents.router.navigate(feature.properties.featureType + '/' + feature.properties.id, { trigger: true });
                     });
-                }
+                },
+                style: geoJsonCollection._style
             });
 
             // Add each geoJson feature to the new layer.
