@@ -6,39 +6,20 @@
 
 (function (root, factory) {
 
-    var Backbone = root.Backbone,
-        _ = root._,
-        Cocktail = root.Cocktail;
+    var Backbone = require('backbone'),
+        _ = require('underscore'),
+        Cocktail = require('backbone.cocktail'),
+        L = global.L = require('leaflet'),
+        geoJsonExtent = require('geojson-extent');
 
-    var geoJsonExtent = require('geojson-extent');
+    Backbone.$ = require('jquery');
+    Backbone.Marionette = require('backbone.marionette');
 
-    if (Backbone === void 0) {
-        Backbone = root.Backbone = require('backbone');
-    }
+    require('leaflet.markercluster');
 
-    if (Backbone.Associations === void 0) {
-        Backbone = require('backbone-associations');
-    }
+    module.exports = factory(Backbone, _, Cocktail, L, geoJsonExtent);
 
-    if (_ === void 0) {
-        _ = root._ = require('underscore');
-    }
-
-    if (Cocktail === void 0) {
-        Cocktail = root.Cocktail = require('backbone.cocktail');
-    }
-
-    if (Backbone.$ === void 0) {
-        Backbone.$ = require('jquery');
-    }
-
-    if (Backbone.Marionette === void 0) {
-        Backbone.Marionette = require('backbone.marionette');
-    }
-
-    module.exports = factory(Backbone, _, Cocktail, geoJsonExtent);
-
-}(window, function (Backbone, _, Cocktail, geoJsonExtent) {
+}(window, function (Backbone, _, Cocktail, L, geoJsonExtent) {
 
     var NZTAComponents = {};
 
@@ -113,6 +94,33 @@
     };
 
     /**
+     * @module Application
+     * @extends Marionette.Application
+     * @desc An application constructor which hooks into the NZTAComponents router and Backbone instance.
+     */
+    NZTAComponents.Application = Backbone.Marionette.Application.extend({
+        /**
+         * @func initialize
+         * @param {object} [options]
+         * @param {string} [options.rootPath] - Your application root.
+         */
+        initialize: function (options) {
+            var rootPath = (options !== void 0 && options.rootPath !== void 0) ? options.rootPath : '/';
+
+            this.router = router;
+
+            this.on('start', function () {
+                if (Backbone.history) {
+                    Backbone.history.start({ 
+                        pushState: true,
+                        root: rootPath
+                    });
+                }
+            });
+        }
+    });
+
+    /**
      * @module DrillDownMenuView
      * @extends Marionette.LayoutView
      * @param {object} vent - Backbone.Wreqr.EventAggregator instance.
@@ -125,18 +133,19 @@
 
         /**
          * @func initialize
-         * @override
          * @param {object} options
          * @param {object} options.model - Backbone.Model instance.
+         * @param {object} options.defaultPanel - NZTAComponents.DropDownPanelView constructor.
+         * @param {string} options.defaultCollectionKey
          */
         initialize: function (options) {
             var defaultPanel;
 
             this._panelViews = [];
 
-            defaultPanel = this._createPanel(options.defaultPanel, options.defaultCollectionKey);
+            this.model = options.model;
 
-            this.model = this.options.model || new Backbone.Model();
+            defaultPanel = this._createPanel(options.defaultPanel, options.defaultCollectionKey);
 
             this.model.set({
                 baseUrlSegment: this.options.baseUrlSegment || '',
@@ -343,8 +352,8 @@
          * @param {object} [options.collection] - Backbone.Collection instance.
          */
         initialize: function (options) {
-            this.model = options.model || new Backbone.Model();
-            this.collection = options.collection || new Backbone.Collection();
+            this.model = (options.model !== void 0 && options.model !== void 0) ? options.model : new Backbone.Model();
+            this.collection = (options.collection !== void 0 && options.collection !== void 0) ? options.collection : new Backbone.Collection();
 
             // Automatically re-render the view when the collection changes.
             this.listenTo(this.collection, 'change', function () {
@@ -409,8 +418,8 @@
          */
         initialize: function (options) {
             this._clusterRadius = (options !== void 0 && options.radius !== void 0) ? options.radius : 8;
-            this._clusterFillColor = (options !== void 0 && options.fillColor !== void 0) ? options.fillColor : '#fff';
-            this._clusterColor = (options !== void 0 && options.color !== void 0) ? options.color : '#000';
+            this._clusterFillColor = (options !== void 0 && options.fillColor !== void 0) ? options.fillColor : 'transparent';
+            this._clusterColor = (options !== void 0 && options.color !== void 0) ? options.color : 'transparent';
             this._clusterWeight = (options !== void 0 && options.weight !== void 0) ? options.weight : 1;
             this._clusterOpacity = (options !== void 0 && options.opacity !== void 0) ? options.opacity : 1;
             this._clusterFillOpacity = (options !== void 0 && options.fillOpacity !== void 0) ? options.fillOpacity : 0.8;
@@ -496,10 +505,10 @@
     
     /**
      * @module GeoJsonModel
-     * @extends Backbone.AssociatedModel
+     * @extends Backbone.Model
      * @desc Represents a GeoJSON feature.
      */
-    NZTAComponents.GeoJsonModel = Backbone.AssociatedModel.extend({
+    NZTAComponents.GeoJsonModel = Backbone.Model.extend({
 
         /**
          * @func _getBounds
@@ -667,7 +676,7 @@
             this._addMap();
 
             // Remove default map controls
-            this.options.map.removeControl(this.options.map.zoomControl);
+            this.map.removeControl(this.map.zoomControl);
 
             this.listenTo(this.options.vent, 'userControls.zoomIn', function () {
                 this._zoomIn();
@@ -698,16 +707,51 @@
             }, this);
         },
 
-        _addMap: function () {
-            var map = L.map('map').setView([-40.866119, 174.143780], 5);
+        /**
+         * @func _addMap
+         * @param {object} [options]
+         * @param {array} [options.bounds] - Northing-easting to set the map view.
+         * @param {integer} [options.zoom] - Initial zoom level.
+         * @param {integer} [options.maxZoom] - Maximum zoom level.
+         * @param {integer} [options.zIndex] - z-index for the map.
+         * @param {string} [options.tileLayer] - Tile layer URI.
+         * @param {array} [options.subdomains] - Tile layer sub domains.
+         * @param {string} [options.attribution] - Map attribution.
+         * @return Leaflet map instance.
+         * @desc Add a Leaflet map to the MapView.
+         */
+        _addMap: function (options) {
+            var bounds = (options !== void 0 && options.bounds !== void 0) ? options.bounds : [-40.866119, 174.143780],
+                zoom = (options !== void 0 && options.zoom !== void 0) ? options.zoom : 5,
+                tileLayer = (options !== void 0 && options.tileLayer !== void 0) ? options.tileLayer : 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
 
-            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            var opt = {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 18,
                 zIndex: 10
-            }).addTo(map);
+            };
 
-            this.options.map = map;
+            if (options !== void 0 && options.maxZoom !== void 0) {
+                opt.maxZoom = options.maxZoom;
+            }
+
+            if (options !== void 0 && options.zIndex !== void 0) {
+                opt.zIndex = options.zIndex;
+            }
+
+            if (options !== void 0 && options.subdomains !== void 0) {
+                opt.subdomains = options.subdomains;
+            }
+
+            if (options !== void 0 && options.attribution !== void 0) {
+                opt.attribution = options.attribution;
+            }
+
+            this.map = L.map('map').setView(bounds, zoom);
+
+            L.tileLayer(tileLayer, opt).addTo(this.map);
+
+            return this.map;
         },
 
         /**
@@ -735,7 +779,7 @@
          * @desc Zoom the map in one level.
          */
         _zoomIn: function () {
-            this.options.map.zoomIn();
+            this.map.zoomIn();
         },
 
         /**
@@ -743,7 +787,7 @@
          * @desc Zoom the map out one level.
          */
         _zoomOut: function () {
-            this.options.map.zoomOut();
+            this.map.zoomOut();
         },
 
         /**
@@ -751,7 +795,7 @@
          * @desc Move the map to the user's current location.
          */
         _locateUser: function () {
-            this.options.map.locate({ setView: true, maxZoom: this.options.map.getZoom() });
+            this.map.locate({ setView: true, maxZoom: this.map.getZoom() });
         },
 
         /**
@@ -760,7 +804,7 @@
          * @desc Set the map's bounds.
          */
         _setMapBounds: function (northingEasting) {
-            this.options.map.fitBounds(northingEasting);
+            this.map.fitBounds(northingEasting);
         },
 
         /**
@@ -854,7 +898,7 @@
                 onEachFeature: function (feature, layer) {
                     layer.on('click', function () {
                         NZTAComponents.router._previousFragment = Backbone.history.fragment;
-                        NZTAComponents.router.navigate(feature.properties.featureType + '/' + feature.properties.id, { trigger: true });
+                        NZTAComponents.router.navigate(layerId + '/' + feature.properties.id, { trigger: true });
                     });
                 },
                 style: geoJsonCollection._style
@@ -888,7 +932,7 @@
                 }
             });
 
-            this.options.map.addLayer(mapLayer.markers);
+            this.map.addLayer(mapLayer.markers);
 
             this.mapLayers.push(mapLayer);
 
@@ -934,24 +978,20 @@
 
     /**
      * @module PopupModel
-     * @extends Backbone.AssociatedModel
+     * @extends Backbone.Model
      * @desc The model for {@link PopupView}.
      */
-    NZTAComponents.PopupModel = Backbone.AssociatedModel.extend({
-        relations: [
-            {
-                type: Backbone.One,
-                key: 'feature',
-                relatedModel: NZTAComponents.GeoJsonModel
-            }
-        ],
+    NZTAComponents.PopupModel = Backbone.Model.extend({
+
         defaults: {
             hidden: true,
-            type: null,
-            feature: function () {
-                return new NZTAComponents.GeoJsonModel();
-            }
+            featureType: null // Used for conditional template switching.
+        },
+
+        initialize: function () {
+            this.feature = new NZTAComponents.GeoJsonModel();
         }
+
     });
 
     /**
@@ -972,7 +1012,15 @@
          * @param {object} [options.model] - Backbone.Model instance.
          */
         initialize: function (options) {
-            this.model = options.model || new NZTAComponents.PopupModel();
+            this.model = (options !== void 0 && options.model !== void 0) ? options.model : new NZTAComponents.PopupModel();
+        },
+
+        templateHelpers: function () {
+            var self = this;
+
+            return {
+                feature: self.model.feature.get('properties') || {}
+            };
         },
 
         /**
@@ -1004,13 +1052,14 @@
         _openPopup: function (featureModel) {
             this.model.set({
                 'hidden': false,
-                'feature': featureModel,
-                'type': featureModel.get('properties').featureType
+                'featureType': featureModel.get('properties').featureType
             });
+
+            this.model.feature = featureModel;
 
             this.render();
 
-            this.options.vent.trigger('popup.afterOpen', this.model.get('feature'));
+            this.options.vent.trigger('popup.afterOpen', this.model.feature);
         },
 
         /**
@@ -1022,9 +1071,7 @@
 
             // Reset the model
             this.model.set({
-                'hidden': true,
-                'feature': null,
-                'type': null
+                'hidden': true
             });
 
             this.render();
@@ -1062,56 +1109,6 @@
 
             this.model.set('mapLayerFiltersOpen', false);
         },
-
-        template: _.template('\
-            <div class="map-controls"> \
-                <div class="section--view-type-nav"> \
-                    <ul class="map-nav--view-type"> \
-                        <li class="nav__item"> \
-                            <a id="mobile-control-map-button" href="javascript:void(0)">Map</a> \
-                        </li> \
-                    </ul> \
-                    <ul class="map-nav--view-type"> \
-                        <li class="nav__item"> \
-                            <a id="mobile-control-list-button" href="javascript:void(0)">List</a> \
-                        </li> \
-                    </ul> \
-                </div> \
-                <div class="section--map-nav"> \
-                    <ul class="map-nav--icon"> \
-                        <li class="map-nav__item"> \
-                            <a href="javascript:void(0)" id="zoomIn"> \
-                                <i class="i i-map-plus"></i> \
-                                <span class="sr-only">Zoom in</span> \
-                            </a> \
-                        </li> \
-                        <li class="map-nav__item"> \
-                            <a href="javascript:void(0)" id="zoomOut"> \
-                                <i class="i i-map-minus"></i> \
-                                <span class="sr-only">Zoom out</span> \
-                            </a> \
-                        </li> \
-                    </ul> \
-                    <ul class="map-nav--icon"> \
-                        <li class="map-nav__item"> \
-                            <a href="javascript:void(0)" id="locate"> \
-                                <i class="i i-map-compass"></i> \
-                                <span class="sr-only">Locate</span> \
-                            </a> \
-                        </li> \
-                    </ul> \
-                    <ul class="map-nav--icon"> \
-                        <li class="map-nav__item toggle-tools"> \
-                            <a href="javascript:void(0)" class="" id="mapLayerFilters"> \
-                                <i class="i i-map-cog"></i> \
-                                <span class="sr-only">View options</span> \
-                            </a> \
-                        </li> \
-                    </ul> \
-                    <div id="key"></div> \
-                </div> \
-            </div> \
-        '),
 
         events: {
             'click #zoomIn': '_zoomIn',
