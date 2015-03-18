@@ -187,8 +187,10 @@
         _showNewPanelView: function (panelView) {
             var panelRegion = null;
 
-            // hide the default panel
-            this._panelViews[0].$el.hide();
+            // Hide previous panels that may be shown
+            for (var i = 0; i < this._panelViews.length - 1; i++) {
+                this._panelViews[i].$el.hide();
+            };
 
             panelRegion = this._createPanelRegion(panelView.cid);
             panelRegion.show(panelView);
@@ -244,7 +246,7 @@
             var backUrlSegment = this._setBackUrlSegment(),
                 trigger = backUrlSegment === '' ? true : false,
                 currentPanel = this._panelViews[this._panelViews.length - 2];
-
+            
             this.model.set({
                 currentPanelViewCid: currentPanel.cid,
             });
