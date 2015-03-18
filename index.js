@@ -246,7 +246,7 @@
             var backUrlSegment = this._setBackUrlSegment(),
                 trigger = backUrlSegment === '' ? true : false,
                 currentPanel = this._panelViews[this._panelViews.length - 2];
-            
+
             this.model.set({
                 currentPanelViewCid: currentPanel.cid,
             });
@@ -386,7 +386,17 @@
          */
         _navigateMenuBack: function () {
             this.trigger('drillDownMenu.navigate.back', this.cid);
+        },
+
+        /**
+         * @param  {string} urlSegment - Fragment to route to.
+         * @desc Handle popup routing from a panel to maintain history state.
+         */
+        _handlePopupRoute: function(urlSegment) {
+            router._previousFragment = Backbone.history.fragment;
+            router.navigate(urlSegment, { trigger: true });
         }
+        
     });
     Cocktail.mixin(NZTAComponents.DrillDownPanelView, eventsMixin, browserHelpersMixin, featureHelpersMixin);
 
@@ -403,6 +413,15 @@
          */
         onShow: function () {
             this.$el.closest('.view-absolute').addClass('anim-reveal');
+        },
+
+        /**
+         * @param  {string} urlSegment - Fragment to route to.
+         * @desc Handle popup routing from a panel to maintain history state.
+         */
+        _handlePopupRoute: function(urlSegment) {
+            router._previousFragment = Backbone.history.fragment;
+            router.navigate(urlSegment, { trigger: true });
         }
 
     });
