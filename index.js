@@ -93,6 +93,26 @@
         }
     };
 
+    var geoJsonMixin = {
+        /**
+         * @func _getBounds
+         * @param  {object} geometry - A GeoJson geometry.
+         * @return {array}
+         * @desc Get the geometries bounds.
+         */
+        _getBounds: function (geometry) {
+            var bounds;
+
+            if (geometry.type === 'Polygon') {
+                bounds = geoJsonExtent.polygon(geometry).coordinates[0];
+            } else {
+                bounds = geoJsonExtent(geometry);
+            }
+
+            return bounds;
+        }
+    };
+
     /**
      * @module Application
      * @extends Marionette.Application
@@ -532,23 +552,6 @@
     NZTAComponents.GeoJsonModel = Backbone.Model.extend({
 
         /**
-         * @func _getBounds
-         * @return {array}
-         * @desc Get the feature's bounds.
-         */
-        _getBounds: function () {
-            var bounds;
-
-            if (this.get('geometry').type === 'Polygon') {
-                bounds = geoJsonExtent.polygon(this.attributes).coordinates[0];
-            } else {
-                bounds = geoJsonExtent(this.attributes);
-            }
-
-            return bounds;
-        },
-
-        /**
          * @func _getDisplayTime
          * @return {string}
          * @desc Get a display friendly string representing the time it will take to travel the feature.
@@ -723,6 +726,10 @@
                 this._toggleMapLayer(layerName);
             }, this);
 
+            this.listenTo(this.options.vent, 'map.moveToFeature', function (feature) {
+                this._moveToFeature(feature);
+            }, this);
+
             this.listenTo(this.model, 'data.all', function (features) {
                 this.options.vent.trigger('map.update.all', features);
             }, this);
@@ -833,11 +840,20 @@
          * @param {object} geoJsonModel - GeoJsonModel instance.
          * @desc Center the map on a GeoJsonFeature.
          */
-        _moveToFeature: function (geoJsonModel) {
-            var bounds = geoJsonModel._getBounds(),
+        _moveToFeature: function (feature) {
+            var bounds,
+                geometry,
                 northingEasting;
 
-            if (geoJsonModel.get('geometry').type === 'Polygon') {
+            if (feature.get !== void 0) {
+                geometry = feature.get('geometry');
+            } else {
+                geometry = feature;
+            }
+
+            bounds = this._getBounds(geometry);
+
+            if (geometry.type === 'Polygon') {
                 northingEasting = [
                     [bounds[0][1], bounds[0][0]],
                     [bounds[2][1], bounds[2][0]]
@@ -995,7 +1011,7 @@
         }
 
     });
-    Cocktail.mixin(NZTAComponents.MapView, eventsMixin, browserHelpersMixin);
+    Cocktail.mixin(NZTAComponents.MapView, eventsMixin, browserHelpersMixin, geoJsonMixin);
 
     /**
      * @module PopupModel
