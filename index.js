@@ -454,10 +454,7 @@
      */
     NZTAComponents.GeoJsonCollection = Backbone.Collection.extend({
 
-        /**
-         * @function initialize
-         */
-        initialize: function (options) {
+        _setOptions: function(options) {
             this._clusterRadius = (options !== void 0 && options.radius !== void 0) ? options.radius : 8;
             this._clusterFillColor = (options !== void 0 && options.fillColor !== void 0) ? options.fillColor : 'transparent';
             this._clusterColor = (options !== void 0 && options.color !== void 0) ? options.color : 'transparent';
@@ -604,7 +601,8 @@
 
         defaults: {
             polling: false,
-            popupFeatureId: null
+            popupFeatureId: null,
+            queue: []
         },
 
         /**
@@ -645,29 +643,87 @@
         },
 
         /**
-         * @func _startPolling
+         * @func _addQueue
+         * @param {string} [method] - The name of the method to fetch.
          * @param {integer} [interval] - The number of miliseconds between each fetch (defaults to 60000).
-         * @desc Starts updating the model's collections at a set interval.
+         * @desc Adds a method to the poll queue with a defined interval.
          */
-        _startPolling: function (interval) {
+        _addQueue: function (method, interval) {
+            if(this.queue === void 0) {
+                this.queue = [];
+            }
+
+            if(!this._isQueued(method)) {
+                this.queue.push({
+                    method: method,
+                    interval: interval,
+                    isPolled: false
+                });
+            }
+        },
+
+        /**
+         * @func _removeQueue
+         * @param {string} [method] - The name of the method to remove.
+         * @desc Clears a methods poll, and remove it from the poll queue.
+         */
+        _removeQueue: function (method) {
+            var poll =  this._isQueued(method);
+            if(poll !== void 0) {
+                clearTimeout(poll.pollingInterval);
+                this.queue = _.reject(this.queue, { method: method });
+            }
+        },
+
+        /**
+         * @func _isQueued
+         * @param {string} [method] - The name of the method to check.
+         * @desc Check if a method exists in the poll queue.
+         */
+        _isQueued: function (method) {
+            return _.findWhere(this.queue, { method: method });
+        },
+
+        /**
+         * @func _startPolling
+         * @param {boolean} [force] - If true will poll everything in the queue.
+         * @desc Iterates through the set queue, setting up the interval polling.
+         */
+        _startPolling: function (force) {
             var self = this,
-                n = interval || 60000;
+                force = (force !== void 0 ? force : false);
 
-            this._doFetch();
+            if(this.queue.length > 0) {
+                _.each(this.queue, function(poll, i) {
+                    if(force || !poll.isPolled) {
+                        // make an initial request.
+                        self[poll.method]();
 
-            this.pollingInterval = setInterval(function () {
-                self._doFetch();
-            }, n);
+                        // setup the polling interval.
+                        poll.pollingInterval = setInterval(function () {
+                            self[poll.method]();
+                        }, poll.interval);
 
-            this.set('polling', true);
+                        poll.isPolled = true;
+                        this.queue[i] = poll;
+                    }
+                }, this);
+
+                this.set('polling', true);
+            }
         },
 
         /**
          * @func _stopPolling
-         * @desc Stops polling the model's collection endpoints.
+         * @desc Stops polling everything in the queue.
          */
         _stopPolling: function () {
-            clearTimeout(this.pollingInterval);
+            if (this.queue.length > 0) {
+                _.each(this.queue, function(poll, i) {
+                    clearTimeout(poll.pollingInterval);
+                    this.queue[i] = poll;
+                }, this);
+            }
 
             this.set('polling', false);
         }
@@ -694,6 +750,7 @@
         initialize: function (options) {
 
             this.model = (options !== void 0 && options.model !== void 0) ? options.model : new NZTAComponents.MapModel();
+            this.model.set('vent', this.options.vent);
 
             this.mapLayers = [];
 
@@ -714,8 +771,8 @@
                 this._locateUser();
             }, this);
 
-            this.listenTo(this.options.vent, 'userControls.startPolling', function (interval) {
-                this._startPolling(interval);
+            this.listenTo(this.options.vent, 'userControls.startPolling', function () {
+                this._startPolling();
             }, this);
 
             this.listenTo(this.options.vent, 'userControls.stopPolling', function () {
@@ -999,11 +1056,11 @@
 
             markersArray = mapLayer.markers.getLayers();
 
-            return mapLayer !== void 0 && markersArray.length > 0;
+            return mapLayer !== void 0;
         },
 
-        _startPolling: function (interval) {
-            this.model._startPolling(interval);
+        _startPolling: function () {
+            this.model._startPolling(true);
         },
 
         _stopPolling: function () {
