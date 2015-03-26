@@ -648,16 +648,18 @@
          * @param {integer} [interval] - The number of miliseconds between each fetch (defaults to 60000).
          * @desc Adds a method to the poll queue with a defined interval.
          */
-        _addQueue: function (method, interval) {
+        _addQueue: function (method, interval, isPolled) {
             if(this.queue === void 0) {
                 this.queue = [];
             }
+
+            isPolled = (isPolled !== void 0 ? isPolled : false);
 
             if(!this._isQueued(method)) {
                 this.queue.push({
                     method: method,
                     interval: interval,
-                    isPolled: false
+                    isPolled: isPolled
                 });
             }
         },
@@ -689,15 +691,18 @@
          * @param {boolean} [force] - If true will poll everything in the queue.
          * @desc Iterates through the set queue, setting up the interval polling.
          */
-        _startPolling: function (force) {
+        _startPolling: function (force, init) {
             var self = this,
-                force = (force !== void 0 ? force : false);
+                force = (force !== void 0 ? force : false),
+                init = (init !== void 0 ? init : false);
 
             if(this.queue.length > 0) {
                 _.each(this.queue, function(poll, i) {
                     if(force || !poll.isPolled) {
-                        // make an initial request.
-                        self[poll.method]();
+                        // run an initial poll.
+                        if(init) {
+                            self[poll.method]();
+                        }
 
                         // setup the polling interval.
                         poll.pollingInterval = setInterval(function () {
@@ -771,8 +776,8 @@
                 this._locateUser();
             }, this);
 
-            this.listenTo(this.options.vent, 'userControls.startPolling', function () {
-                this._startPolling();
+            this.listenTo(this.options.vent, 'userControls.startPolling', function (force, init) {
+                this._startPolling(force, init);
             }, this);
 
             this.listenTo(this.options.vent, 'userControls.stopPolling', function () {
@@ -1056,11 +1061,11 @@
 
             markersArray = mapLayer.markers.getLayers();
 
-            return mapLayer !== void 0;
+            return mapLayer !== void 0 && markersArray.length > 0;
         },
 
-        _startPolling: function () {
-            this.model._startPolling(true);
+        _startPolling: function (force, init) {
+            this.model._startPolling(force, init);
         },
 
         _stopPolling: function () {
