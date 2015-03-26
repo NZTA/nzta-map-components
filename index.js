@@ -602,7 +602,7 @@
         defaults: {
             polling: false,
             popupFeatureId: null,
-            queue: []
+            pollCollection: []
         },
 
         /**
@@ -643,20 +643,20 @@
         },
 
         /**
-         * @func _addQueue
+         * @func _addToPollCollection
          * @param {string} [method] - The name of the method to fetch.
          * @param {integer} [interval] - The number of miliseconds between each fetch (defaults to 60000).
-         * @desc Adds a method to the poll queue with a defined interval.
+         * @desc Adds a method to the poll collection with a defined interval.
          */
-        _addQueue: function (method, interval, isPolled) {
-            if(this.queue === void 0) {
-                this.queue = [];
+        _addToPollCollection: function (method, interval, isPolled) {
+            if(this.pollCollection === void 0) {
+                this.pollCollection = [];
             }
 
             isPolled = (isPolled !== void 0 ? isPolled : false);
 
-            if(!this._isQueued(method)) {
-                this.queue.push({
+            if(!this._isInPollCollection(method)) {
+                this.pollCollection.push({
                     method: method,
                     interval: interval,
                     isPolled: isPolled
@@ -665,39 +665,39 @@
         },
 
         /**
-         * @func _removeQueue
+         * @func _removeFromPollCollection
          * @param {string} [method] - The name of the method to remove.
-         * @desc Clears a methods poll, and remove it from the poll queue.
+         * @desc Clears a methods interval, and remove it from the poll collection.
          */
-        _removeQueue: function (method) {
-            var poll =  this._isQueued(method);
+        _removeFromPollCollection: function (method) {
+            var poll =  this._isInPollCollection(method);
             if(poll !== void 0) {
                 clearTimeout(poll.pollingInterval);
-                this.queue = _.reject(this.queue, { method: method });
+                this.pollCollection = _.reject(this.pollCollection, { method: method });
             }
         },
 
         /**
          * @func _isQueued
          * @param {string} [method] - The name of the method to check.
-         * @desc Check if a method exists in the poll queue.
+         * @desc Check if a method exists in the poll collection.
          */
-        _isQueued: function (method) {
-            return _.findWhere(this.queue, { method: method });
+        _isInPollCollection: function (method) {
+            return _.findWhere(this.pollCollection, { method: method });
         },
 
         /**
          * @func _startPolling
          * @param {boolean} [force] - If true will poll everything in the queue.
-         * @desc Iterates through the set queue, setting up the interval polling.
+         * @desc Iterates through the poll collection, setting up the interval polling.
          */
         _startPolling: function (force, init) {
             var self = this,
                 force = (force !== void 0 ? force : false),
                 init = (init !== void 0 ? init : false);
 
-            if(this.queue.length > 0) {
-                _.each(this.queue, function(poll, i) {
+            if(this.pollCollection.length > 0) {
+                _.each(this.pollCollection, function(poll, i) {
                     if(force || !poll.isPolled) {
                         // run an initial poll.
                         if(init) {
@@ -710,7 +710,7 @@
                         }, poll.interval);
 
                         poll.isPolled = true;
-                        this.queue[i] = poll;
+                        this.pollCollection[i] = poll;
                     }
                 }, this);
 
@@ -720,13 +720,13 @@
 
         /**
          * @func _stopPolling
-         * @desc Stops polling everything in the queue.
+         * @desc Stops polling everything in the poll collection.
          */
         _stopPolling: function () {
-            if (this.queue.length > 0) {
-                _.each(this.queue, function(poll, i) {
+            if (this.pollCollection.length > 0) {
+                _.each(this.pollCollection, function(poll, i) {
                     clearTimeout(poll.pollingInterval);
-                    this.queue[i] = poll;
+                    this.pollCollection[i] = poll;
                 }, this);
             }
 
