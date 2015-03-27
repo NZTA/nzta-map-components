@@ -646,6 +646,7 @@
          * @func _addToPollCollection
          * @param {string} [method] - The name of the method to fetch.
          * @param {integer} [interval] - The number of miliseconds between each fetch (defaults to 60000).
+         * @param {boolean} [isPolled] - True if the fetch method has been called prior, will then block single poll calls.
          * @desc Adds a method to the poll collection with a defined interval.
          */
         _addToPollCollection: function (method, interval, isPolled) {
@@ -678,7 +679,7 @@
         },
 
         /**
-         * @func _isQueued
+         * @func _isInPollCollection
          * @param {string} [method] - The name of the method to check.
          * @desc Check if a method exists in the poll collection.
          */
@@ -688,7 +689,8 @@
 
         /**
          * @func _startPolling
-         * @param {boolean} [force] - If true will poll everything in the queue.
+         * @param {boolean} [force] - If true will poll everything in the poll collection.
+         * @param {boolean} [init] - If true will run an initial fetch.
          * @desc Iterates through the poll collection, setting up the interval polling.
          */
         _startPolling: function (force, init) {

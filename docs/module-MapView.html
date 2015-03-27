@@ -99,29 +99,6 @@
         </tr>
 
     
-
-        <tr>
-            
-                <td class="name"><code>map</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Leaflet map instance.</td>
-        </tr>
-
-    
     </tbody>
 </table>
 
@@ -159,7 +136,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line639">line 639</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line739">line 739</a>
     </li></ul></dd>
     
 
@@ -220,11 +197,15 @@
 
     
 
-    <h4 class="name" id="~_addMapLayer"><span class="type-signature">(inner) </span>_addMapLayer<span class="signature">(layerId)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~_addMap"><span class="type-signature">(inner) </span>_addMap<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
+
+<div class="description">
+    Add a Leaflet map to the MapView.
+</div>
 
 
 
@@ -247,6 +228,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -259,7 +242,193 @@
 
         <tr>
             
-                <td class="name"><code>layerId</code></td>
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>bounds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Northing-easting to set the map view.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>zoom</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Initial zoom level.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxZoom</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Maximum zoom level.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>zIndex</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">z-index for the map.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tileLayer</code></td>
             
 
             <td class="type">
@@ -272,10 +441,93 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">The ID of the layer in this.mapLayers you want to remove.</td>
+            <td class="description last">Tile layer URI.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>subdomains</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Tile layer sub domains.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attribution</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Map attribution.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -316,7 +568,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line867">line 867</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line802">line 802</a>
     </li></ul></dd>
     
 
@@ -339,12 +591,16 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Leaflet map instance.
+</div>
 
 
-    <h5>Example</h5>
+
     
-    <pre class="prettyprint"><code>The layerId should match the GeoJsonCollection collection name.
-// 'cameras'</code></pre>
 
 
 
@@ -449,7 +705,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line840">line 840</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1016">line 1016</a>
     </li></ul></dd>
     
 
@@ -477,6 +733,139 @@
     <h5>Example</h5>
     
     <pre class="prettyprint"><code>The layerId should match the GeoJsonCollection name.
+// 'cameras'</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~_addMapLayer"><span class="type-signature">(inner) </span>_addMapLayer<span class="signature">(layerId)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>layerId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the layer in this.mapLayers you want to remove.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1043">line 1043</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>The layerId should match the GeoJsonCollection collection name.
 // 'cameras'</code></pre>
 
 
@@ -586,7 +975,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line769">line 769</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line935">line 935</a>
     </li></ul></dd>
     
 
@@ -668,7 +1057,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line728">line 728</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line885">line 885</a>
     </li></ul></dd>
     
 
@@ -799,7 +1188,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line745">line 745</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line902">line 902</a>
     </li></ul></dd>
     
 
@@ -930,7 +1319,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line692">line 692</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line849">line 849</a>
     </li></ul></dd>
     
 
@@ -1061,7 +1450,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line736">line 736</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line893">line 893</a>
     </li></ul></dd>
     
 
@@ -1192,7 +1581,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line778">line 778</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line944">line 944</a>
     </li></ul></dd>
     
 
@@ -1323,7 +1712,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line799">line 799</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line965">line 965</a>
     </li></ul></dd>
     
 
@@ -1418,7 +1807,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line712">line 712</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line869">line 869</a>
     </li></ul></dd>
     
 
@@ -1500,7 +1889,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line720">line 720</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line877">line 877</a>
     </li></ul></dd>
     
 
@@ -1676,7 +2065,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line648">line 648</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line751">line 751</a>
     </li></ul></dd>
     
 
@@ -1718,13 +2107,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-DrillDownItemView.html">DrillDownItemView</a></li><li><a href="module-DrillDownMenuView.html">DrillDownMenuView</a></li><li><a href="module-DrillDownPanelView.html">DrillDownPanelView</a></li><li><a href="module-GeoJsonCollection.html">GeoJsonCollection</a></li><li><a href="module-GeoJsonModel.html">GeoJsonModel</a></li><li><a href="module-MapModel.html">MapModel</a></li><li><a href="module-MapView.html">MapView</a></li><li><a href="module-PopupModel.html">PopupModel</a></li><li><a href="module-PopupView.html">PopupView</a></li><li><a href="module-router.html">router</a></li><li><a href="module-UserControlsView.html">UserControlsView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_getRelationsForFeature">_getRelationsForFeature</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Application.html">Application</a></li><li><a href="module-DrillDownItemView.html">DrillDownItemView</a></li><li><a href="module-DrillDownMenuView.html">DrillDownMenuView</a></li><li><a href="module-DrillDownPanelView.html">DrillDownPanelView</a></li><li><a href="module-GeoJsonCollection.html">GeoJsonCollection</a></li><li><a href="module-GeoJsonModel.html">GeoJsonModel</a></li><li><a href="module-MapModel.html">MapModel</a></li><li><a href="module-MapView.html">MapView</a></li><li><a href="module-PopupModel.html">PopupModel</a></li><li><a href="module-PopupView.html">PopupView</a></li><li><a href="module-router.html">router</a></li><li><a href="module-UserControlsView.html">UserControlsView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_getBounds">_getBounds</a></li><li><a href="global.html#_getRelationsForFeature">_getRelationsForFeature</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Fri Mar 13 2015 16:55:53 GMT+1300 (NZDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Fri Mar 27 2015 14:31:13 GMT+1300 (NZDT)
 </footer>
 
 <script> prettyPrint(); </script>
