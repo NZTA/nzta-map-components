@@ -1,0 +1,2332 @@
+{
+    "features": [
+        {
+            "geometry": {
+                "coordinates": [
+                    174.717,
+                    -36.735
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Greville road looking south",
+                "direction": "Northeast",
+                "featureType": "camera",
+                "group": "SH1-Northern",
+                "id": "413",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/413.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 1 Greville Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/413.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/413",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.737,
+                    -36.761
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Tristram Avenue looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Northern",
+                "id": "414",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/414.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 2 Tristram Ave",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/414.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/414",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.753,
+                    -36.789
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Northcote Rd looking north",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH1-Northern",
+                "id": "415",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/415.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 3 Northcote Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/415.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/415",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.762,
+                    -36.799
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Esmonde Rd looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Northern",
+                "id": "416",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/416.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 4 Esmonde Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/416.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/416",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.754,
+                    -36.812
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Onewa Rd looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Northern",
+                "id": "417",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/417.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 5 Onewa Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/417.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/417",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.677,
+                    -36.531
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Johnstone hill tunnels looking south",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH1-Northern",
+                "id": "462",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/462.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 Alpurt Web cam",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/462.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/462",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.891,
+                    -36.997
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Goodwood heights looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "460",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/460.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 17 Goodwood",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/460.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/460",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.892,
+                    -37
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Rainbows End looking north at SH1 and SH20 link",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "461",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/461.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 18 Rainbows End",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/461.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/461",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.757,
+                    -36.86
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Central motorway junction looking south at the link between state highways 1 and 16",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "418",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/418.jpg",
+                "journeys": [
+                    {
+                        "id": "3",
+                        "name": "Point Chevalier to Auckland CBD"
+                    }
+                ],
+                "legs": [
+                    {
+                        "id": "Western+Springs+to+Auckland+CBD",
+                        "name": "Western Springs to Auckland CBD",
+                        "totalLength": "-3.259903542493549"
+                    }
+                ],
+                "name": "SH1 1 CMJ",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/418.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/418",
+                "ways": [
+                    {
+                        "id": "016",
+                        "name": "016"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.782,
+                    -36.878
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Southern motorway at newmarket looking south towards the Market  Rd overbridge",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "419",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/419.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 2 Market Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/419.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/419",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.796,
+                    -36.889
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Greenlane Rd looking north",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "420",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/420.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 3 Greenlane Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/420.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/420",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.826,
+                    -36.915
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "South eastern highway looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "421",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/421.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 4 SE Highway",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/421.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/421",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.888,
+                    -36.992
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Redoubt Rd looking north",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "422",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/422.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 5 Redoubt Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/422.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/422",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.861,
+                    -36.957
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Bairds Rd looking north",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "423",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/423.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 6 Bairds Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/423.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/423",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.91,
+                    -37.021
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Alfriston Rd looking north",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "424",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/424.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 7 Alfriston Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/424.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/424",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.91,
+                    -37.028
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Takanini looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "425",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/425.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 8 Takanini",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/425.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/425",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.913,
+                    -37.044
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Walter-Strevens Drive looking south ",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "426",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/426.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 9 Walter Streven",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/426.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/426",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.918,
+                    -37.053
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Pahurehure looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "427",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/427.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 10 Pahurehure",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/427.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/427",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.924,
+                    -37.062
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": " Rushgreen Ave looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "428",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/428.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 11 Rushgreen Ave",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/428.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/428",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.936,
+                    -37.085
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Park estate looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "429",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/429.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 12 Park Estate",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/429.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/429",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.944,
+                    -37.094
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Slippery Creek looking  south ",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH1-Southern",
+                "id": "430",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/430.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH1 13 Slippery Crk",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/430.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/430",
+                "ways": [
+                    {
+                        "id": "01N",
+                        "name": "01N"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.746,
+                    -36.869
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Bond St looking east ",
+                "direction": "Eastbound",
+                "featureType": "camera",
+                "group": "SH16-North-Western",
+                "id": "431",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/431.jpg",
+                "journeys": [
+                    {
+                        "id": "3",
+                        "name": "Point Chevalier to Auckland CBD"
+                    }
+                ],
+                "legs": [
+                    {
+                        "id": "Auckland+CBD+to+Western+Springs",
+                        "name": "Auckland CBD to Western Springs",
+                        "totalLength": "3.264506849448456"
+                    }
+                ],
+                "name": "SH16 1 Bond St",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/431.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/431",
+                "ways": [
+                    {
+                        "id": "016",
+                        "name": "016"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.706,
+                    -36.872
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Gt North Road looking west",
+                "direction": "Westbound",
+                "featureType": "camera",
+                "group": "SH16-North-Western",
+                "id": "432",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/432.jpg",
+                "journeys": [
+                    {
+                        "id": "3",
+                        "name": "Point Chevalier to Auckland CBD"
+                    }
+                ],
+                "legs": [
+                    {
+                        "id": "Point+Chevalier+to+Western+Springs",
+                        "name": "Point Chevalier to Western Springs",
+                        "totalLength": "-2.4707533434672433"
+                    }
+                ],
+                "name": "SH16 2 Gt North Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/432.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/432",
+                "ways": [
+                    {
+                        "id": "016",
+                        "name": "016"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.653,
+                    -36.858
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Te Atatu Road looking east",
+                "direction": "Eastbound",
+                "featureType": "camera",
+                "group": "SH16-North-Western",
+                "id": "433",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/433.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH16 3 Te Atatu Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/433.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/433",
+                "ways": [
+                    {
+                        "id": "016",
+                        "name": "016"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.632,
+                    -36.849
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Lincoln Rd  looking east",
+                "direction": "Eastbound",
+                "featureType": "camera",
+                "group": "SH16-North-Western",
+                "id": "434",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/434.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH16 4 Lincoln Rd E",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/434.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/434",
+                "ways": [
+                    {
+                        "id": "016",
+                        "name": "016"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.63,
+                    -36.847
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Lincoln Rd looking west",
+                "direction": "Westbound",
+                "featureType": "camera",
+                "group": "SH16-North-Western",
+                "id": "435",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/435.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH16 5 Lincoln Rd W",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/435.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/435",
+                "ways": [
+                    {
+                        "id": "016",
+                        "name": "016"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.612,
+                    -36.813
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Hobsonville Rd looking east",
+                "direction": "Eastbound",
+                "featureType": "camera",
+                "group": "SH16-North-Western",
+                "id": "511",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/511.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH16 Hobsonville Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/511.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/511",
+                "ways": [
+                    {
+                        "id": "016",
+                        "name": "016"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.614,
+                    -36.819
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Hobsonville node looking west",
+                "direction": "Westbound",
+                "featureType": "camera",
+                "group": "SH16-North-Western",
+                "id": "512",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/512.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH16 Hobsonville",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/512.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/512",
+                "ways": [
+                    {
+                        "id": "016",
+                        "name": "016"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.621,
+                    -36.808
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Trig Rd looking west",
+                "direction": "Westbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "463",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/463.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 Trig Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/463.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/463",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.628,
+                    -36.805
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Upper harbour motorway looking west ",
+                "direction": "Westbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "464",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/464.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 Waiahora Creek",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/464.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/464",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.638,
+                    -36.8
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Upper harbour motorway looking East",
+                "direction": "Westbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "465",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/465.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 Brigham Creek",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/465.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/465",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.645,
+                    -36.796
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Upper harbour motorway looking west",
+                "direction": "Westbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "466",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/466.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 Sinton Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/466.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/466",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.655,
+                    -36.791
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Upper harbour motorway looking east",
+                "direction": "Eastbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "467",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/467.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 Squadron Dr",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/467.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/467",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.678,
+                    -36.782
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Tauhinu bridge looking east",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "436",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/436.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 6 Tauhinu BRG",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/436.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/436",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.703,
+                    -36.757
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Albany Highway Looking East",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "437",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/437.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 7 Albany HWY",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/437.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/437",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.681,
+                    -36.778
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Tauhinu East Looking East",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "438",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/438.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 8 Tauhinu East",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/438.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/438",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.714,
+                    -36.753
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Paul matthews looking east",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "439",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/439.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 9 Paul Matthews",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/439.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/439",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.686,
+                    -36.771
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Greenhithe Rd looking east",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "440",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/440.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 10 Greenhithe ",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/440.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/440",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.691,
+                    -36.765
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "George deane looking east",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "441",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/441.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 11 George Deane",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/441.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/441",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.662,
+                    -36.786
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Upper harbour looking east ",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "442",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/442.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 12 Upper Hbr CW",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/442.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/442",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.7,
+                    -36.763
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Wicklam Lane looking west",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH18-Upper-Harbour",
+                "id": "443",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/443.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH18 13 Wicklam Lane",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/443.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/443",
+                "ways": [
+                    {
+                        "id": "018",
+                        "name": "018"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.76731010549,
+                    -36.921434017433
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Queenstown Rd looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "444",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/444.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 1 Queenstown Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/444.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/444",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.759,
+                    -36.917
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Hillsborough Rd looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "445",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/445.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 2 Hillsborough ",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/445.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/445",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.75,
+                    -36.914
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Melrose looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "446",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/446.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 3 Melrose",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/446.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/446",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.74,
+                    -36.911
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Dominion Rd looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "447",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/447.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 4 Dominion Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/447.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/447",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.73,
+                    -36.907
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Sandringham looking north",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "448",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/448.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 5 Sandringham",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/448.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/448",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.782,
+                    -36.928
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Gloucester Park looking north",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "449",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/449.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 6 Gloucester Pk",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/449.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/449",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.786,
+                    -36.931
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Onehunga wharf looking north",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "450",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/450.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 7 Onehunga ",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/450.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/450",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.79,
+                    -36.941
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Rimu Rd looking north",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "451",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/451.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 8 Rimu Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/451.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/451",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.793,
+                    -36.945
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Crawford Ave looking north",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "452",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/452.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 9 Crawford Ave",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/452.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/452",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.792,
+                    -36.953
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Coronation Rd looking east ",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "453",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/453.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 Coronation Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/453.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/453",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.843,
+                    -36.993
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Puhinui road interchange looking south",
+                "direction": "Southbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "454",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/454.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 11 Puhinui Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/454.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/454",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.852,
+                    -36.998
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Nesdale Rd looking east",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "455",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/455.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 12 Nesdale Road",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/455.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/455",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.865,
+                    -36.998
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Plunket Ave looking south",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "456",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/456.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 13 Plunket Ave",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/456.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/456",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.874,
+                    -36.996
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Lambie Drive looking south",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "457",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/457.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 14 Lambie Drive",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/457.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/457",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.881,
+                    -36.996
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Barrowcliffe Place looking west",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "458",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/458.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 15 Barrowcliffe",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/458.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/458",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.886,
+                    -36.996
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Great South Rd Looking westbound",
+                "direction": "Northbound",
+                "featureType": "camera",
+                "group": "SH20-South-Western",
+                "id": "459",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/459.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20 16 Great South",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/459.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/459",
+                "ways": [
+                    {
+                        "id": "020",
+                        "name": "020"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.784,
+                    -36.982
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Montgomerie Rd looking east ",
+                "direction": "Eastbound",
+                "featureType": "camera",
+                "group": "SH20A",
+                "id": "515",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/515.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20A Montgomerie Rd",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/515.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/515",
+                "ways": [
+                    {
+                        "id": "20A",
+                        "name": "20A"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.789,
+                    -36.973
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Kirkbride Rd looking east ",
+                "direction": "Eastbound",
+                "featureType": "camera",
+                "group": "SH20A",
+                "id": "516",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/516.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20A Kirkbride Road",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/516.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/516",
+                "ways": [
+                    {
+                        "id": "20A",
+                        "name": "20A"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.796,
+                    -36.966
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Bader Drive looking east ",
+                "direction": "Eastbound",
+                "featureType": "camera",
+                "group": "SH20A",
+                "id": "517",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/517.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20A Bader Drive",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/517.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/517",
+                "ways": [
+                    {
+                        "id": "20A",
+                        "name": "20A"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.835,
+                    -36.996
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Prices Rd looking east",
+                "direction": "Eastbound",
+                "featureType": "camera",
+                "group": "SH20B",
+                "id": "513",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/513.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20B Prices Road",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/513.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/513",
+                "ways": [
+                    {
+                        "id": "20B",
+                        "name": "20B"
+                    }
+                ]
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    174.829,
+                    -36.998
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "Waokauri Creek looking west",
+                "direction": "Westbound",
+                "featureType": "camera",
+                "group": "SH20B",
+                "id": "514",
+                "imageUrl": "http://www.trafficnz.info/tas/camera/514.jpg",
+                "journeys": [],
+                "legs": [],
+                "name": "SH20B Waokauri Creek",
+                "offline": "false",
+                "regions": [
+                    {
+                        "id": "2",
+                        "name": "Auckland"
+                    }
+                ],
+                "thumbUrl": "http://www.trafficnz.info/tas/camera/514.jpg",
+                "underMaintenance": true,
+                "viewUrl": "http://www.trafficnz.info/tas/camera/view/514",
+                "ways": [
+                    {
+                        "id": "20B",
+                        "name": "20B"
+                    }
+                ]
+            },
+            "type": "Feature"
+        }
+    ],
+    "type": "FeatureCollection"
+}

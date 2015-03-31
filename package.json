@@ -1,0 +1,20 @@
+{
+  "name": "nzta-map-components",
+  "version": "1.0.2",
+  "description": "nzta-map-components pages",
+  "main": "js/index.js",
+  "author": "SilverStripe",
+  "dependencies": {
+    "backbone": "^1.1.2",
+    "backbone.marionette": "^2.4.1",
+    "backbone.touch": "^0.4.2",
+    "backbone.wreqr": "^1.3.1",
+    "jquery": "^2.1.3",
+    "nzta-map-components": "silverstripe-iterators/nzta-map-components#1.0.2",
+    "underscore": "^1.8.2"
+  },
+  "devDependencies": {
+    "grunt": "0.4.5",
+    "grunt-browserify": "3.3.0"
+  }
+}
