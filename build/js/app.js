@@ -6,6 +6,8 @@ require('./backbone-shim');
 var NZTAComponents = require('nzta-map-components'),
     Backbone = require('backbone'),
     MapModel = require('./components/mapModel'),
+    PopupView = require('./components/popupView'),
+    PopupModel = require('./components/popupModel'),
     UserControlsView = require('./components/userControlsView');
 
 var app = new NZTAComponents.Application();
@@ -27,9 +29,10 @@ app.addRegions({
 //     vent: vent
 // }));
 
-// app.popupRegion.show(new NZTAComponents.PopupView({
-//     vent: vent
-// }));
+app.popupRegion.show(new PopupView({
+    vent: vent,
+    model: new PopupModel()
+}));
 
 app.userControlsRegion.show(new UserControlsView({
     vent: vent

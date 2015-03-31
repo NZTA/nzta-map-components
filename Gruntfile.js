@@ -11,11 +11,20 @@ module.exports = function(grunt) {
           ]
         }
       }
+    },
+
+    sass: {
+      prod: {
+        files: {
+          "dist/css/screen.css": "build/scss/screen.scss"
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-sass');
 
-  grunt.registerTask('default', ['browserify']);
+  grunt.registerTask('default', ['browserify', 'sass']);
 
 };

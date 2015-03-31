@@ -10,7 +10,9 @@ var MapModel = NZTAComponents.MapModel.extend({
         this.markers = new NZTAComponents.GeoJsonCollection();
         this.markers._setOptions({
             iconClass: 'marker-cluster',
-            iconUrl: 'dist/images/marker-icon-2x.png'
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            iconUrl: 'dist/images/marker-plain.png'
         });
 
         // Run the initial data fetch.
@@ -31,7 +33,7 @@ var MapModel = NZTAComponents.MapModel.extend({
         $.when(
             $.getJSON('http://geojson-spew.msapp.co.nz/')
         ).done(function (markers) {
-            self.markers.set(markers);
+            self.markers.set(markers.features);
 
             self.trigger('data.all', { 
                 markers: self.markers
