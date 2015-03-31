@@ -247,11 +247,6 @@
 
             this._setBackUrlSegment();
 
-            // Remove the previous panel if it's not the default panel.
-            if (this._panelViews.length > 1) {
-                this._removePanel(this.model.get('currentPanelViewCid'));
-            }
-
             this.model.set('currentUrlSegment', forwardUrl);
 
             router.navigate(forwardUrl, { trigger: true });
