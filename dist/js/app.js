@@ -86,7 +86,7 @@ var MapModel = NZTAComponents.MapModel.extend({
 
         // When all requests are complete, inform the view.
         $.when(
-            $.getJSON('../dist/fixtures/markers.json')
+            $.getJSON('http://geojson-spew.msapp.co.nz/')
         ).done(function (markers) {
             self.markers.set(markers);
 
