@@ -29,7 +29,7 @@ var MapModel = NZTAComponents.MapModel.extend({
 
         // When all requests are complete, inform the view.
         $.when(
-            $.getJSON('../../fixtures/markers.json')
+            $.getJSON('../dist/fixtures/markers.json')
         ).done(function (markers) {
             self.markers.set(markers);
 
