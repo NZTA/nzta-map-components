@@ -170,8 +170,7 @@
             this.model.set({
                 baseUrlSegment: this.options.baseUrlSegment || '',
                 currentPanelViewCid: defaultPanel.cid,
-                backUrlSegment: null,
-                currentUrlSegment: null
+                urlCollection: []
             });
         },
 
@@ -217,37 +216,16 @@
         },
 
         /**
-         * @func _setBackUrlSegment
-         * @return {string} The URL segment being navigated away from.
-         * @desc Set the 'back' URL segment. Called before navigating to a new route.
-         */
-        _setBackUrlSegment: function () {
-            var baseUrlSegment = this.model.get('baseUrlSegment'),
-                backUrlSegment = this.model.get('backUrlSegment'),
-                currentUrlSegment = this.model.get('currentUrlSegment');
-
-            if (backUrlSegment === null || backUrlSegment === baseUrlSegment) {
-                currentUrlSegment = baseUrlSegment;
-            } else {
-                currentUrlSegment = currentUrlSegment;
-            }
-
-            this.model.set('backUrlSegment', currentUrlSegment);
-
-            return currentUrlSegment;
-        },
-
-        /**
          * @func _navigateMenuForward
          * @param {string} urlSegment - The URL segment we're navigating to.
          * @desc Navigates the menu forward one step.
          */
         _navigateMenuForward: function (urlSegment) {
-            var forwardUrl = this.model.get('baseUrlSegment') + urlSegment;
+            var forwardUrl = this.model.get('baseUrlSegment') + urlSegment,
+                urlCollection = this.model.get('urlCollection');
 
-            this._setBackUrlSegment();
-
-            this.model.set('currentUrlSegment', forwardUrl);
+            urlCollection.push(forwardUrl);
+            this.model.set('urlCollection', urlCollection);
 
             router.navigate(forwardUrl, { trigger: true });
         },
@@ -258,9 +236,11 @@
          * @desc Navigates the menu back one step.
          */
         _navigateMenuBack: function (cid) {
-            var backUrlSegment = this._setBackUrlSegment(),
-                trigger = backUrlSegment === '' ? true : false,
-                currentPanel = this._panelViews[this._panelViews.length - 2];
+            var currentPanel = this._panelViews[this._panelViews.length - 2],
+                urlCollection = this.model.get('urlCollection');
+
+            urlCollection.pop();
+            this.model.set('urlCollection', urlCollection);
 
             this.model.set({
                 currentPanelViewCid: currentPanel.cid,
@@ -270,9 +250,7 @@
 
             this._removePanel(cid);
 
-            this.model.set('currentUrlSegment', backUrlSegment);
-
-            router.navigate(backUrlSegment, { trigger: trigger });
+            router.navigate(_.last(urlCollection), { trigger: false });
         },
 
         /**
