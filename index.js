@@ -767,6 +767,10 @@
                 this._moveToFeature(feature);
             }, this);
 
+            this.listenTo(this.options.vent, 'map.updateLayer', function (layerId) {
+                this._updateMapLayer(layerId);
+            }, this);
+
             this.listenTo(this.model, 'data.all', function (features) {
                 this.options.vent.trigger('map.update.all', features);
             }, this);
@@ -1167,11 +1171,11 @@
 
     /**
      * @module UserControlsView
-     * @extends Marionette.ItemView
+     * @extends Marionette.LayoutView
      * @param {object} vent - Backbone.Wreqr.EventAggregator instance.
      * @desc User controls for the Map.
      */
-    NZTAComponents.UserControlsView = Backbone.Marionette.ItemView.extend({
+    NZTAComponents.UserControlsView = Backbone.Marionette.LayoutView.extend({
 
         /**
          * @func initialize
