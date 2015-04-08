@@ -1171,7 +1171,7 @@
 
     /**
      * @module UserControlsView
-     * @extends Marionette.ItemView
+     * @extends Marionette.LayoutView
      * @param {object} vent - Backbone.Wreqr.EventAggregator instance.
      * @desc User controls for the Map.
      */
