@@ -767,6 +767,10 @@
                 this._moveToFeature(feature);
             }, this);
 
+            this.listenTo(this.options.vent, 'map.updateLayer', function (layerId) {
+                this._updateMapLayer(layerId);
+            }, this);
+
             this.listenTo(this.model, 'data.all', function (features) {
                 this.options.vent.trigger('map.update.all', features);
             }, this);
