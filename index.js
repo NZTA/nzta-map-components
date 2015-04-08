@@ -1171,7 +1171,7 @@
      * @param {object} vent - Backbone.Wreqr.EventAggregator instance.
      * @desc User controls for the Map.
      */
-    NZTAComponents.UserControlsView = Backbone.Marionette.ItemView.extend({
+    NZTAComponents.UserControlsView = Backbone.Marionette.LayoutView.extend({
 
         /**
          * @func initialize
