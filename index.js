@@ -786,6 +786,7 @@
          * @param {string} [options.tileLayer] - Tile layer URI.
          * @param {array} [options.subdomains] - Tile layer sub domains.
          * @param {string} [options.attribution] - Map attribution.
+         * @param {string} [options.scrollWheelZoom] - Map scrollWheelZoom.
          * @return Leaflet map instance.
          * @desc Add a Leaflet map to the MapView.
          */
@@ -799,6 +800,8 @@
                 maxZoom: 18,
                 zIndex: 10
             };
+
+            var mapOpt = {};
 
             if (options !== void 0 && options.maxZoom !== void 0) {
                 opt.maxZoom = options.maxZoom;
@@ -816,7 +819,11 @@
                 opt.attribution = options.attribution;
             }
 
-            this.map = L.map('map').setView(bounds, zoom);
+            if (options !== void 0 && options.scrollWheelZoom !== void 0) {
+                mapOpt.scrollWheelZoom = options.scrollWheelZoom;
+            }
+
+            this.map = L.map('map', mapOpt).setView(bounds, zoom);
 
             L.tileLayer(tileLayer, opt).addTo(this.map);
 
