@@ -286,8 +286,13 @@
          * @return {Object} The newly created View.
          * @desc Create a panel within the DrillDownMenuView.
          */
-        _createPanel: function (ViewConstructor, collectionKey, collectionFilter, modelValues) {
-            var panelView = new ViewConstructor({ vent: this.options.vent }),
+        _createPanel: function (ViewConstructor, collectionKey, collectionFilter, modelValues, options) {
+            var defOptions = {
+                vent: this.options.vent
+            };
+
+            var initOptions = $.extend(defOptions, options),
+                panelView = new ViewConstructor(initOptions),
                 models;
 
             this.listenTo(panelView, 'drillDownMenu.navigate.forward', this._navigateMenuForward, this);
