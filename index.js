@@ -768,6 +768,10 @@
                 this._toggleMapLayer(layerName);
             }, this);
 
+            this.listenTo(this.options.vent, 'map.resetView', function (options) {
+                this._resetView(options);
+            }, this);
+
             this.listenTo(this.options.vent, 'map.moveToFeature', function (feature) {
                 this._moveToFeature(feature);
             }, this);
@@ -853,6 +857,17 @@
                     this._updateMapLayer(key);
                 }
             }, this);
+        },
+
+        /**
+         * @func _resetMapView
+         * @desc Reset the map view to default center and zoom.
+         */
+        _resetView: function (options) {
+            var bounds = (options !== void 0 && options.bounds !== void 0) ? options.bounds : [-40.866119, 174.143780],
+                zoom = (options !== void 0 && options.zoom !== void 0) ? options.zoom : 5;
+
+            this.map.setView(bounds, zoom);
         },
 
         /**
