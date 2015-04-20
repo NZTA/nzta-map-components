@@ -110,6 +110,32 @@
             }
 
             return bounds;
+        },
+
+        /**
+         * @func _getDirection
+         * @param  {array} geometry - First lat lng point.
+         * @param  {array} geometry - Last lat lng point.
+         * @return {string}
+         * @desc Get the direction between two points as readable text (northbound, southbound, eastbound, westbound).
+         */
+        _getDirection: function (first, last) {
+            var lonDiff = Math.abs(first[0]) - Math.abs(last[0]),
+                latDiff = Math.abs(first[1]) - Math.abs(last[1]);
+
+            if(Math.abs(latDiff) > Math.abs(lonDiff)) {
+                if(latDiff < 0) {
+                    return 'southbound';
+                } else {
+                    return 'northbound';
+                }
+            } else {
+                if(lonDiff < 0) {
+                    return 'eastbound';
+                } else {
+                    return 'westbound';
+                }
+            }
         }
     };
 
@@ -316,7 +342,7 @@
             return panelView;
         }
     });
-    Cocktail.mixin(NZTAComponents.DrillDownMenuView, eventsMixin, browserHelpersMixin, featureHelpersMixin);
+    Cocktail.mixin(NZTAComponents.DrillDownMenuView, eventsMixin, browserHelpersMixin, featureHelpersMixin, geoJsonMixin);
 
     /**
      * @module DrillDownPanelView
@@ -396,7 +422,7 @@
         }
         
     });
-    Cocktail.mixin(NZTAComponents.DrillDownPanelView, eventsMixin, browserHelpersMixin, featureHelpersMixin);
+    Cocktail.mixin(NZTAComponents.DrillDownPanelView, eventsMixin, browserHelpersMixin, featureHelpersMixin, geoJsonMixin);
 
     /**
      * @module DrillDownItemView
