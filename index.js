@@ -1214,6 +1214,14 @@
             router._previousFragment = null;
 
             this.options.vent.trigger('popup.afterClose');
+        },
+
+        /**
+         * @param  {string} urlSegment - Fragment to route to.
+         * @desc Handle popup routing from a popup.
+         */
+        _handlePopupRoute: function(urlSegment) {
+            router.navigate(urlSegment, { trigger: true, replace: true });
         }
     });
     Cocktail.mixin(NZTAComponents.PopupView, eventsMixin, browserHelpersMixin);
