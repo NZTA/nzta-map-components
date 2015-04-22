@@ -470,6 +470,7 @@
             this._iconSize = (options !== void 0 && options.iconSize !== void 0) ? options.iconSize : [26, 34];
             this._iconAnchor = (options !== void 0 && options.iconAnchor !== void 0) ? options.iconAnchor : [13, 34];
             this._style = (options !== void 0 && options.style !== void 0) ? options.style : null;
+            this._click = (options !== void 0 && options.click !== void 0) ? options.click : null;
         },
 
         /**
@@ -1027,10 +1028,12 @@
                 },
                 // Add a click handler to each feature marker.
                 onEachFeature: function (feature, layer) {
-                    layer.on('click', function () {
-                        NZTAComponents.router._previousFragment = Backbone.history.fragment;
-                        NZTAComponents.router.navigate(layerId + '/' + feature.properties.id, { trigger: true });
-                    });
+                    if(geoJsonCollection._click !== false) {
+                        layer.on('click', function () {
+                            NZTAComponents.router._previousFragment = Backbone.history.fragment;
+                            NZTAComponents.router.navigate(layerId + '/' + feature.properties.id, { trigger: true });
+                        });
+                    }
                 },
                 style: geoJsonCollection._style
             });
