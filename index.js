@@ -1010,7 +1010,8 @@
         _updateMapLayer: function (layerId) {
             var geoJsonCollection = this.model[layerId],
                 mapLayer = this._getMapLayerById(layerId),
-                geoJsonLayer;
+                geoJsonLayer,
+                self = this;
 
             // Remove the current cluster group if it exists, so we don't end up with
             // multiple cluster groups displaying the same data.
@@ -1030,7 +1031,9 @@
                 onEachFeature: function (feature, layer) {
                     if(geoJsonCollection._click !== false) {
                         layer.on('click', function () {
-                            NZTAComponents.router._previousFragment = Backbone.history.fragment;
+                            if(!self._isPopupRoute(Backbone.history.fragment.split("/"))) {
+                                NZTAComponents.router._previousFragment = Backbone.history.fragment;
+                            }
                             NZTAComponents.router.navigate(layerId + '/' + feature.properties.id, { trigger: true });
                         });
                     }
@@ -1105,6 +1108,10 @@
 
         _stopPolling: function () {
             this.model._stopPolling();
+        },
+
+        _isPopupRoute: function (params) {
+            return false;
         }
 
     });
