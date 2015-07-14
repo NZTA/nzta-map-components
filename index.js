@@ -779,8 +779,8 @@
                 this._zoomOut();
             }, this);
 
-            this.listenTo(this.options.vent, 'userControls.locateUser', function () {
-                this._locateUser();
+            this.listenTo(this.options.vent, 'userControls.locateUser', function (maxZoom) {
+                this._locateUser(maxZoom);
             }, this);
 
             this.listenTo(this.options.vent, 'userControls.startPolling', function (force, init) {
@@ -917,8 +917,9 @@
          * @func _locateUser
          * @desc Move the map to the user's current location.
          */
-        _locateUser: function () {
-            this.map.locate({ setView: true, maxZoom: this.map.getZoom() });
+        _locateUser: function (maxZoom) {
+            var maxZoom = (maxZoom !== void 0 ? maxZoom : this.map.getZoom());
+            this.map.locate({ setView: true, maxZoom: maxZoom });
         },
 
         /**
@@ -1289,10 +1290,11 @@
 
         /**
          * @func _locateUser
-         * @desc Pan to the user's location on the Map.
+         * @desc Pan to the user's location on the Map. An optional zoom parameter can
+         *       be set on the view `locateUserMaxZoom` to define the maxZoom on location.
          */
         _locateUser: function () {
-            this.options.vent.trigger('userControls.locateUser');
+            this.options.vent.trigger('userControls.locateUser', this.options.locateUserMaxZoom);
         },
 
         /**
