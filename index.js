@@ -926,8 +926,9 @@
          * @param {array} northingEasting - E.g. [ [654.321, 123.456], [654.321, 123.456] ]
          * @desc Set the map's bounds.
          */
-        _setMapBounds: function (northingEasting) {
-            this.map.fitBounds(northingEasting);
+        _setMapBounds: function (northingEasting, options) {
+            var options = (options !== void 0 ? options : {});
+            this.map.fitBounds(northingEasting, options);
         },
 
         /**
@@ -935,8 +936,9 @@
          * @param {object} geoJsonModel - GeoJsonModel instance.
          * @desc Center the map on a GeoJsonFeature.
          */
-        _moveToFeature: function (feature) {
-            var bounds,
+        _moveToFeature: function (feature, options) {
+            var options = (options !== void 0 ? options : {}),
+                bounds,
                 geometry,
                 northingEasting;
 
@@ -960,7 +962,7 @@
                 ];
             }
 
-            this._setMapBounds(northingEasting);
+            this._setMapBounds(northingEasting, options);
         },
 
         /**
@@ -1327,6 +1329,15 @@
          */
         _handleMobileControlListButton: function () {
             $('body').addClass('list-active');
+        },
+
+        /**
+         * @param  {string} urlSegment - Fragment to route to.
+         * @desc Handle popup routing from a panel to maintain history state.
+         */
+        _handlePopupRoute: function(urlSegment) {
+            router._previousFragment = Backbone.history.fragment;
+            router.navigate(urlSegment, { trigger: true });
         }
     });
     Cocktail.mixin(NZTAComponents.UserControlsView, eventsMixin, browserHelpersMixin);
