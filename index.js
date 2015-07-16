@@ -32,7 +32,73 @@
 
         _previousFragment: null,
 
-        _handleNav: function(action, type, id) { }
+        _handleNav: function(action, type, id) { },
+
+        /**
+         * @override To maintain get parameters on navigation.
+         */
+        navigate: function(fragment, options) {
+            fragment = this._getQuery(fragment);
+            Backbone.Marionette.AppRouter.prototype.navigate(fragment, options, this);
+            return this;
+        },
+
+        /**
+         * @func _getQuery
+         * @desc Return the current fragment with the query appended, excluding duplicates.
+         */
+        _getQuery: function (fragment) {
+            var params = this._getParams(),
+                query = "";
+
+            _.each(params, function (value, name) {
+                if(query.length) {
+                    query += "&";
+                }
+
+                // check if the name exists in the fragment
+                if(fragment !== void 0) {
+                    if(fragment.indexOf(name) < 1) {
+                        query += name + "=" + value;
+                    }
+                } else {
+                    query += name + "=" + value;
+                }
+            });
+
+            if(query.length) {
+                if(fragment !== void 0) {
+                    if(fragment.indexOf('?') > -1) {
+                        fragment += '&' + query;
+                    } else {
+                        fragment += '?' + query;
+                    }
+                } else {
+                    fragment = '?' + query;
+                }
+            }
+
+            return fragment;
+        },
+
+        /**
+         * @func _getParams
+         * @desc Return all get params from the url as an object.
+         */
+        _getParams: function () {
+            var query = location.search.substr(1),
+                params = {};
+
+            query.split("&").forEach(function(part) {
+                var item = part.split("=");
+                if(item[0] !== "") {
+                    params[item[0]] = decodeURIComponent(item[1]);
+                }
+            });
+
+            return params;
+        }
+
     });
 
     var router = new Router();
