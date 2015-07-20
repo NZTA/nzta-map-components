@@ -36,9 +36,13 @@
 
         /**
          * @override To maintain get parameters on navigation.
+         *           Can negate this by passing through _excludeParams 
+         *           as `true` in the options.
          */
         navigate: function(fragment, options) {
-            fragment = this._getQuery(fragment);
+            if(options._excludeParams === void 0 || !options._excludeParams) {
+                fragment = this._getQuery(fragment);
+            }
             Backbone.Marionette.AppRouter.prototype.navigate(fragment, options, this);
             return this;
         },
