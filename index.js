@@ -541,6 +541,7 @@
             this._iconAnchor = (options !== void 0 && options.iconAnchor !== void 0) ? options.iconAnchor : [13, 34];
             this._style = (options !== void 0 && options.style !== void 0) ? options.style : null;
             this._click = (options !== void 0 && options.click !== void 0) ? options.click : null;
+            this._zIndexOffset = (options !== void 0 && options.zIndexOffset !== void 0) ? options.zIndexOffset : 0;
         },
 
         /**
@@ -1098,7 +1099,7 @@
                         iconAnchor: geoJsonCollection._iconAnchor
                     });
 
-                    return L.marker(latlng, { icon: icon });
+                    return L.marker(latlng, { icon: icon, zIndexOffset: geoJsonCollection._zIndexOffset });
                 },
                 // Add a click handler to each feature marker.
                 onEachFeature: function (feature, layer) {
