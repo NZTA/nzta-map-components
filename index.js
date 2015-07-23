@@ -56,8 +56,6 @@
                 query = "",
                 paramsToExclude = options._paramsToExclude !== void 0 ? options._paramsToExclude : [];
 
-            console.log('test2');
-
             _.each(params, function (value, name) {
                 if(query.length) {
                     query += "&";
