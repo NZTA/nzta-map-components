@@ -41,7 +41,7 @@
          */
         navigate: function(fragment, options) {
             if(options._excludeParams === void 0 || !options._excludeParams) {
-                fragment = this._getQuery(fragment);
+                fragment = this._getQuery(fragment, options);
             }
             Backbone.Marionette.AppRouter.prototype.navigate(fragment, options, this);
             return this;
@@ -51,22 +51,28 @@
          * @func _getQuery
          * @desc Return the current fragment with the query appended, excluding duplicates.
          */
-        _getQuery: function (fragment) {
+        _getQuery: function (fragment, options) {
             var params = this._getParams(),
-                query = "";
+                query = "",
+                paramsToExclude = options._paramsToExclude !== void 0 ? options._paramsToExclude : [];
+
+            console.log('test2');
 
             _.each(params, function (value, name) {
                 if(query.length) {
                     query += "&";
                 }
 
-                // check if the name exists in the fragment
-                if(fragment !== void 0) {
-                    if(fragment.indexOf(name) < 1) {
+                // only exclude params that don't exist in the `paramsToExclude` array
+                if(_.indexOf(paramsToExclude, name) == -1) {
+                    // check if the name exists in the fragment
+                    if(fragment !== void 0) {
+                        if(fragment.indexOf(name) < 1) {
+                            query += name + "=" + value;
+                        }
+                    } else {
                         query += name + "=" + value;
                     }
-                } else {
-                    query += name + "=" + value;
                 }
             });
 
@@ -331,9 +337,10 @@
          * @param {string} cid - The CID of the current panel.
          * @desc Navigates the menu back one step.
          */
-        _navigateMenuBack: function (cid) {
+        _navigateMenuBack: function (cid, options) {
             var currentPanel = this._panelViews[this._panelViews.length - 2],
-                urlCollection = this.model.get('urlCollection');
+                urlCollection = this.model.get('urlCollection'),
+                options = options !== void 0 ? options : { trigger: false };
 
             urlCollection.pop();
             this.model.set('urlCollection', urlCollection);
@@ -346,7 +353,7 @@
 
             this._removePanel(cid);
 
-            router.navigate(_.last(urlCollection), { trigger: false });
+            router.navigate(_.last(urlCollection), options);
         },
 
         /**
