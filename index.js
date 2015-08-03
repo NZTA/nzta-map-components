@@ -540,6 +540,7 @@
             this._clusterWeight = (options !== void 0 && options.weight !== void 0) ? options.weight : 1;
             this._clusterOpacity = (options !== void 0 && options.opacity !== void 0) ? options.opacity : 1;
             this._clusterFillOpacity = (options !== void 0 && options.fillOpacity !== void 0) ? options.fillOpacity : 0.8;
+            this._icon = (options !== void 0 && options.icon !== void 0) ? options.icon : null;
             this._iconClass = (options !== void 0 && options.iconClass !== void 0) ? options.iconClass : 'cluster-icon';
             this._iconUrl = (options !== void 0 && options.iconUrl !== void 0) ? options.iconUrl : '';
             this._iconSize = (options !== void 0 && options.iconSize !== void 0) ? options.iconSize : [26, 34];
@@ -1098,11 +1099,15 @@
 
             geoJsonLayer = L.geoJson(null, {
                 pointToLayer: function(feature, latlng) {
-                    var icon = L.icon({
-                        iconUrl: geoJsonCollection._iconUrl,
-                        iconSize: geoJsonCollection._iconSize,
-                        iconAnchor: geoJsonCollection._iconAnchor
-                    });
+                    var icon = geoJsonCollection._icon;
+
+                    if(icon === void 0 || !icon) {
+                        icon = L.icon({
+                            iconUrl: geoJsonCollection._iconUrl,
+                            iconSize: geoJsonCollection._iconSize,
+                            iconAnchor: geoJsonCollection._iconAnchor
+                        });
+                    }
 
                     return L.marker(latlng, { icon: icon, zIndexOffset: geoJsonCollection._zIndexOffset });
                 },
