@@ -120,6 +120,9 @@
         }
     };
 
+    // Ensure that we have the global 'ga' object, so that trackAnalyticsEvent doesn't throw errors in race conditions
+    var ga = window.ga || function () {};
+
     var eventsMixin = {
         initialize: function () {
             // Add hook for routing
@@ -135,6 +138,33 @@
                     this._onMapData(features);
                 }
             }, this);
+        },
+
+        /**
+         * @func _trackAnalyticsEvent
+         * @param {String} eventCategory
+         * @param {String} eventAction
+         * @param {String} eventLabel
+         * @param {String} eventValue
+         * @desc Track an event using Google Analytics' event tracking API
+         * @see https://developers.google.com/analytics/devguides/collection/analyticsjs/events
+         */
+        _trackAnalyticsEvent: function (eventCategory, eventAction, eventLabel, eventValue) {
+            if (this.trackAnalyticsEvents) {
+                if (eventLabel === void 0) {
+                    eventLabel = "";
+                }
+
+                if (eventValue === void 0) {
+                    eventValue = "";
+                }
+
+                console.log('Sending event to Google Analytics with eventCategory = "' + eventCategory + '", eventAction' +
+                    ' = "' + eventAction + '", eventLabel = "' + eventLabel + '", eventValue = "' + eventValue + '"');
+                ga('send', 'event', eventCategory, eventAction, eventLabel, eventValue);
+            } else {
+                console.log('Tracking of events via analytics is disabled');
+            }
         }
     };
 
@@ -1339,6 +1369,7 @@
          */
         initialize: function (options) {
             this.model = (options !== void 0 && options.model !== void 0) ? options.model : new Backbone.Model();
+            this.trackAnalyticsEvents = (options !== void 0 && options.trackAnalyticsEvents !== void 0) ? options.trackAnalyticsEvents : false;
 
             this.model.set('mapLayerFiltersOpen', false);
         },
@@ -1359,6 +1390,7 @@
          */
         _zoomIn: function () {
             this.options.vent.trigger('userControls.zoomIn');
+            this._trackAnalyticsEvent('userControls', 'zoomIn', 'Right sidebar buttons');
         },
 
         /**
@@ -1367,6 +1399,7 @@
          */
         _zoomOut: function () {
             this.options.vent.trigger('userControls.zoomOut');
+            this._trackAnalyticsEvent('userControls', 'zoomOut', 'Right sidebar buttons');
         },
 
         /**
@@ -1376,6 +1409,7 @@
          */
         _locateUser: function () {
             this.options.vent.trigger('userControls.locateUser', this.options.locateUserMaxZoom);
+            this._trackAnalyticsEvent('userControls', 'locateUser', 'Right sidebar buttons');
         },
 
         /**
@@ -1384,9 +1418,12 @@
          */
         _toggleMapLayerFilters: function () {
             // Toggle the mapLayerFiltersOpen value.
-            this.model.set('mapLayerFiltersOpen', this.model.get('mapLayerFiltersOpen') === false);
+            var mapFiltersOpen = this.model.get('mapLayerFiltersOpen') === false;
+            this.model.set('mapLayerFiltersOpen', mapFiltersOpen);
 
             $('body').toggleClass('tools-active');
+
+            this._trackAnalyticsEvent('userControls', 'toggleMapLayerToolbox', 'Right sidebar buttons', (mapFiltersOpen === true ? 'opening' : 'closing'));
         },
 
         /**
@@ -1395,7 +1432,10 @@
          * @desc Trigger an events which toggles a map layer.
          */
         _toggleMapLayer: function (e) {
-            this.options.vent.trigger('userControls.toggleMapLayer', Backbone.$(e.currentTarget).data('layer'));
+            var selectedLayer = Backbone.$(e.currentTarget).data('layer');
+            this.options.vent.trigger('userControls.toggleMapLayer', selectedLayer);
+
+            this._trackAnalyticsEvent('userControls', 'toggleMapLayer', 'Right sidebar buttons', selectedLayer);
         },
 
         /**
