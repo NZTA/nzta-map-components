@@ -869,6 +869,8 @@
         initialize: function (options) {
 
             this.model = (options !== void 0 && options.model !== void 0) ? options.model : new NZTAComponents.MapModel();
+            this.trackAnalyticsEvents = (options !== void 0 && options.trackAnalyticsEvents !== void 0) ? options.trackAnalyticsEvents : false;
+
             this.model.set('vent', this.options.vent);
 
             this.mapLayers = [];
@@ -917,6 +919,17 @@
             this.listenTo(this.model, 'data.all', function (features) {
                 this.options.vent.trigger('map.update.all', features);
             }, this);
+
+            // Log analytics event whenever any zoom ends (e.g. when the zoomIn button is clicked, if a cluster or icon
+            // is clicked on and the map zooms in, and if the user manually zooms in using for example the scroll wheel
+            var mapViewComponent = this;
+            this.map.on('zoomend', function() {
+                mapViewComponent._trackAnalyticsEvent('mapView', 'mapZoomLevelChanged', 'Recorded anytime zoom level changes, irrespective of direction (in or out) or source (scroll, click, button click)');
+            });
+
+            this.map.on('dragend', function() {
+                mapViewComponent._trackAnalyticsEvent('mapView', 'mapDragged', 'Recorded anytime the map is dragged/panned around by visitors');
+            });
         },
 
         /**
