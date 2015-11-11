@@ -1158,6 +1158,7 @@
                 onEachFeature: function (feature, layer) {
                     if(geoJsonCollection._click !== false) {
                         layer.on('click', function () {
+                            self._trackAnalyticsEvent('mapView', 'layerClick-' + layerId, 'Clicked on icon or multilinestring', feature.properties.id);
                             if(!self._isPopupRoute(Backbone.history.fragment.split("/"))) {
                                 NZTAComponents.router._previousFragment = Backbone.history.fragment;
                             }
