@@ -37,10 +37,10 @@
 
         /**
          * @func _trackAnalyticsEvent
-         * @param {String} eventCategory
-         * @param {String} eventAction
-         * @param {String} eventLabel
-         * @param {String} eventValue
+         * @param {String} eventCategory Max length of 150 bytes
+         * @param {String} eventAction Max length of 500 bytes
+         * @param {String} eventLabel Max length of 500 bytes
+         * @param {Integer} eventValue No max length
          * @desc Track an event using Google Analytics' event tracking API
          * @see https://developers.google.com/analytics/devguides/collection/analyticsjs/events
          */
@@ -54,16 +54,11 @@
                     eventValue = "";
                 }
 
-                console.log('Sending event to Google Analytics with eventCategory = "' + eventCategory + '", eventAction' +
-                    ' = "' + eventAction + '", eventLabel = "' + eventLabel + '", eventValue = "' + eventValue + '"');
                 ga('send', 'event', eventCategory, eventAction, eventLabel, eventValue);
-            } else {
-                console.log('Tracking of events via analytics is disabled');
             }
         },
 
         _trackAnalyticsPage: function () {
-            console.log('Sending page view to Google Analytics');
             ga('send', 'pageview');
         }
     };
