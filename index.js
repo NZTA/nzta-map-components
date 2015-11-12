@@ -23,6 +23,51 @@
 
     var NZTAComponents = {};
 
+    // Ensure that we have the global 'ga' object, so that trackAnalyticsEvent doesn't throw errors in race conditions
+    var ga = window.ga || function () {};
+
+    var browserHelpersMixin = {
+        _isIE: function () {
+            return navigator.appVersion.indexOf("MSIE ") !== -1;
+        },
+
+        _isIE9: function () {
+            return navigator.appVersion.indexOf("MSIE 9.") !== -1;
+        },
+
+        /**
+         * @func _trackAnalyticsEvent
+         * @param {String} eventCategory
+         * @param {String} eventAction
+         * @param {String} eventLabel
+         * @param {String} eventValue
+         * @desc Track an event using Google Analytics' event tracking API
+         * @see https://developers.google.com/analytics/devguides/collection/analyticsjs/events
+         */
+        _trackAnalyticsEvent: function (eventCategory, eventAction, eventLabel, eventValue) {
+            if (this.trackAnalyticsEvents) {
+                if (eventLabel === void 0) {
+                    eventLabel = "";
+                }
+
+                if (eventValue === void 0) {
+                    eventValue = "";
+                }
+
+                console.log('Sending event to Google Analytics with eventCategory = "' + eventCategory + '", eventAction' +
+                    ' = "' + eventAction + '", eventLabel = "' + eventLabel + '", eventValue = "' + eventValue + '"');
+                ga('send', 'event', eventCategory, eventAction, eventLabel, eventValue);
+            } else {
+                console.log('Tracking of events via analytics is disabled');
+            }
+        },
+
+        _trackAnalyticsPage: function () {
+            console.log('Sending page view to Google Analytics');
+            ga('send', 'pageview');
+        }
+    };
+
     var Router = Backbone.Marionette.AppRouter.extend({
 
         routes: {
@@ -44,6 +89,7 @@
                 fragment = this._getQuery(fragment, options);
             }
             Backbone.Marionette.AppRouter.prototype.navigate(fragment, options, this);
+            this._trackAnalyticsPage();
             return this;
         },
 
@@ -108,20 +154,9 @@
         }
 
     });
+    Cocktail.mixin(Router, browserHelpersMixin);
 
     var router = new Router();
-
-    var browserHelpersMixin = {
-        _isIE: function () {
-            return navigator.appVersion.indexOf("MSIE ") !== -1;
-        },
-        _isIE9: function () {
-            return navigator.appVersion.indexOf("MSIE 9.") !== -1;
-        }
-    };
-
-    // Ensure that we have the global 'ga' object, so that trackAnalyticsEvent doesn't throw errors in race conditions
-    var ga = window.ga || function () {};
 
     var eventsMixin = {
         initialize: function () {
@@ -138,33 +173,6 @@
                     this._onMapData(features);
                 }
             }, this);
-        },
-
-        /**
-         * @func _trackAnalyticsEvent
-         * @param {String} eventCategory
-         * @param {String} eventAction
-         * @param {String} eventLabel
-         * @param {String} eventValue
-         * @desc Track an event using Google Analytics' event tracking API
-         * @see https://developers.google.com/analytics/devguides/collection/analyticsjs/events
-         */
-        _trackAnalyticsEvent: function (eventCategory, eventAction, eventLabel, eventValue) {
-            if (this.trackAnalyticsEvents) {
-                if (eventLabel === void 0) {
-                    eventLabel = "";
-                }
-
-                if (eventValue === void 0) {
-                    eventValue = "";
-                }
-
-                console.log('Sending event to Google Analytics with eventCategory = "' + eventCategory + '", eventAction' +
-                    ' = "' + eventAction + '", eventLabel = "' + eventLabel + '", eventValue = "' + eventValue + '"');
-                ga('send', 'event', eventCategory, eventAction, eventLabel, eventValue);
-            } else {
-                console.log('Tracking of events via analytics is disabled');
-            }
         }
     };
 
@@ -924,11 +932,11 @@
             // is clicked on and the map zooms in, and if the user manually zooms in using for example the scroll wheel
             var mapViewComponent = this;
             this.map.on('zoomend', function() {
-                mapViewComponent._trackAnalyticsEvent('mapView', 'mapZoomLevelChanged', 'Recorded anytime zoom level changes, irrespective of direction (in or out) or source (scroll, click, button click)');
+                mapViewComponent._trackAnalyticsEvent('mapView', 'mapZoomLevelChanged');
             });
 
             this.map.on('dragend', function() {
-                mapViewComponent._trackAnalyticsEvent('mapView', 'mapDragged', 'Recorded anytime the map is dragged/panned around by visitors');
+                mapViewComponent._trackAnalyticsEvent('mapView', 'mapDragged');
             });
         },
 
@@ -1158,7 +1166,8 @@
                 onEachFeature: function (feature, layer) {
                     if(geoJsonCollection._click !== false) {
                         layer.on('click', function () {
-                            self._trackAnalyticsEvent('mapView', 'layerClick-' + layerId, 'Clicked on icon or multilinestring', feature.properties.id);
+                            var location = ((feature !== void 0 && feature.properties !== void 0 && feature.properties.regions !== void 0 && feature.properties.regions[0] !== void 0) ? feature.properties.regions[0].name : '');
+                            self._trackAnalyticsEvent('mapView', 'layerClick-' + location + '-' + layerId, 'Clicked on pin or multilinestring', feature.properties.id);
                             if(!self._isPopupRoute(Backbone.history.fragment.split("/"))) {
                                 NZTAComponents.router._previousFragment = Backbone.history.fragment;
                             }
