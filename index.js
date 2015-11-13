@@ -46,15 +46,20 @@
          */
         _trackAnalyticsEvent: function (eventCategory, eventAction, eventLabel, eventValue) {
             if (this.trackAnalyticsEvents) {
-                if (eventLabel === void 0) {
-                    eventLabel = "";
+                var eventData = {
+                    'eventCategory': eventCategory,
+                    'eventAction': eventAction
+                };
+
+                if (eventLabel !== void 0) {
+                    eventData['eventLabel'] = eventLabel;
                 }
 
-                if (eventValue === void 0) {
-                    eventValue = "";
+                if (eventValue !== void 0 && !isNaN(parseInt(eventValue))) {
+                    eventData['eventValue'] = parseInt(eventValue);
                 }
 
-                ga('send', 'event', eventCategory, eventAction, eventLabel, eventValue);
+                ga('send', 'event', eventData);
             }
         },
 
@@ -1162,7 +1167,7 @@
                     if(geoJsonCollection._click !== false) {
                         layer.on('click', function () {
                             var location = ((feature !== void 0 && feature.properties !== void 0 && feature.properties.regions !== void 0 && feature.properties.regions[0] !== void 0) ? feature.properties.regions[0].name : '');
-                            self._trackAnalyticsEvent('mapView', 'layerClick-' + location + '-' + layerId, 'Clicked on pin or multilinestring', feature.properties.id);
+                            self._trackAnalyticsEvent('mapView', 'layerClick-' + location + '-' + layerId, feature.properties.id);
                             if(!self._isPopupRoute(Backbone.history.fragment.split("/"))) {
                                 NZTAComponents.router._previousFragment = Backbone.history.fragment;
                             }
@@ -1408,7 +1413,7 @@
          */
         _zoomIn: function () {
             this.options.vent.trigger('userControls.zoomIn');
-            this._trackAnalyticsEvent('userControls', 'zoomIn', 'Right sidebar buttons');
+            this._trackAnalyticsEvent('userControls', 'zoomIn');
         },
 
         /**
@@ -1417,7 +1422,7 @@
          */
         _zoomOut: function () {
             this.options.vent.trigger('userControls.zoomOut');
-            this._trackAnalyticsEvent('userControls', 'zoomOut', 'Right sidebar buttons');
+            this._trackAnalyticsEvent('userControls', 'zoomOut');
         },
 
         /**
@@ -1427,7 +1432,7 @@
          */
         _locateUser: function () {
             this.options.vent.trigger('userControls.locateUser', this.options.locateUserMaxZoom);
-            this._trackAnalyticsEvent('userControls', 'locateUser', 'Right sidebar buttons');
+            this._trackAnalyticsEvent('userControls', 'locateUser');
         },
 
         /**
@@ -1441,7 +1446,7 @@
 
             $('body').toggleClass('tools-active');
 
-            this._trackAnalyticsEvent('userControls', 'toggleMapLayerToolbox', 'Right sidebar buttons', (mapFiltersOpen === true ? 'opening' : 'closing'));
+            this._trackAnalyticsEvent('userControls', 'toggleMapLayerToolbox', (mapFiltersOpen === true ? 'opened' : 'closed'));
         },
 
         /**
@@ -1450,10 +1455,12 @@
          * @desc Trigger an events which toggles a map layer.
          */
         _toggleMapLayer: function (e) {
-            var selectedLayer = Backbone.$(e.currentTarget).data('layer');
+            var selectedLayer = Backbone.$(e.currentTarget).data('layer'),
+                checked = $(e.currentTarget).is(':checked');
+
             this.options.vent.trigger('userControls.toggleMapLayer', selectedLayer);
 
-            this._trackAnalyticsEvent('userControls', 'toggleMapLayer', 'Right sidebar buttons', selectedLayer);
+            this._trackAnalyticsEvent('userControls', 'toggleMapLayer-' + selectedLayer, (checked ? 'show' : 'hide'));
         },
 
         /**
