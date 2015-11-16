@@ -23,6 +23,51 @@
 
     var NZTAComponents = {};
 
+    // Ensure that we have the global 'ga' object, so that trackAnalyticsEvent doesn't throw errors in race conditions
+    var ga = window.ga || function () {};
+
+    var browserHelpersMixin = {
+        _isIE: function () {
+            return navigator.appVersion.indexOf("MSIE ") !== -1;
+        },
+
+        _isIE9: function () {
+            return navigator.appVersion.indexOf("MSIE 9.") !== -1;
+        },
+
+        /**
+         * @func _trackAnalyticsEvent
+         * @param {String} eventCategory Max length of 150 bytes
+         * @param {String} eventAction Max length of 500 bytes
+         * @param {String} eventLabel Max length of 500 bytes
+         * @param {Integer} eventValue No max length
+         * @desc Track an event using Google Analytics' event tracking API
+         * @see https://developers.google.com/analytics/devguides/collection/analyticsjs/events
+         */
+        _trackAnalyticsEvent: function (eventCategory, eventAction, eventLabel, eventValue) {
+            if (this.trackAnalyticsEvents) {
+                var eventData = {
+                    'eventCategory': eventCategory,
+                    'eventAction': eventAction
+                };
+
+                if (eventLabel !== void 0) {
+                    eventData['eventLabel'] = eventLabel;
+                }
+
+                if (eventValue !== void 0 && !isNaN(parseInt(eventValue))) {
+                    eventData['eventValue'] = parseInt(eventValue);
+                }
+
+                ga('send', 'event', eventData);
+            }
+        },
+
+        _trackAnalyticsPage: function () {
+            ga('send', 'pageview');
+        }
+    };
+
     var Router = Backbone.Marionette.AppRouter.extend({
 
         routes: {
@@ -44,6 +89,7 @@
                 fragment = this._getQuery(fragment, options);
             }
             Backbone.Marionette.AppRouter.prototype.navigate(fragment, options, this);
+            this._trackAnalyticsPage();
             return this;
         },
 
@@ -108,17 +154,9 @@
         }
 
     });
+    Cocktail.mixin(Router, browserHelpersMixin);
 
     var router = new Router();
-
-    var browserHelpersMixin = {
-        _isIE: function () {
-            return navigator.appVersion.indexOf("MSIE ") !== -1;
-        },
-        _isIE9: function () {
-            return navigator.appVersion.indexOf("MSIE 9.") !== -1;
-        }
-    };
 
     var eventsMixin = {
         initialize: function () {
@@ -839,6 +877,8 @@
         initialize: function (options) {
 
             this.model = (options !== void 0 && options.model !== void 0) ? options.model : new NZTAComponents.MapModel();
+            this.trackAnalyticsEvents = (options !== void 0 && options.trackAnalyticsEvents !== void 0) ? options.trackAnalyticsEvents : false;
+
             this.model.set('vent', this.options.vent);
 
             this.mapLayers = [];
@@ -887,6 +927,17 @@
             this.listenTo(this.model, 'data.all', function (features) {
                 this.options.vent.trigger('map.update.all', features);
             }, this);
+
+            // Log analytics event whenever any zoom ends (e.g. when the zoomIn button is clicked, if a cluster or icon
+            // is clicked on and the map zooms in, and if the user manually zooms in using for example the scroll wheel
+            var mapViewComponent = this;
+            this.map.on('zoomend', function() {
+                mapViewComponent._trackAnalyticsEvent('mapView', 'mapZoomLevelChanged');
+            });
+
+            this.map.on('dragend', function() {
+                mapViewComponent._trackAnalyticsEvent('mapView', 'mapDragged');
+            });
         },
 
         /**
@@ -1115,6 +1166,8 @@
                 onEachFeature: function (feature, layer) {
                     if(geoJsonCollection._click !== false) {
                         layer.on('click', function () {
+                            var location = ((feature !== void 0 && feature.properties !== void 0 && feature.properties.regions !== void 0 && feature.properties.regions[0] !== void 0) ? feature.properties.regions[0].name : '');
+                            self._trackAnalyticsEvent('mapView', 'layerClick-' + location + '-' + layerId, feature.properties.id);
                             if(!self._isPopupRoute(Backbone.history.fragment.split("/"))) {
                                 NZTAComponents.router._previousFragment = Backbone.history.fragment;
                             }
@@ -1339,6 +1392,7 @@
          */
         initialize: function (options) {
             this.model = (options !== void 0 && options.model !== void 0) ? options.model : new Backbone.Model();
+            this.trackAnalyticsEvents = (options !== void 0 && options.trackAnalyticsEvents !== void 0) ? options.trackAnalyticsEvents : false;
 
             this.model.set('mapLayerFiltersOpen', false);
         },
@@ -1359,6 +1413,7 @@
          */
         _zoomIn: function () {
             this.options.vent.trigger('userControls.zoomIn');
+            this._trackAnalyticsEvent('userControls', 'zoomIn');
         },
 
         /**
@@ -1367,6 +1422,7 @@
          */
         _zoomOut: function () {
             this.options.vent.trigger('userControls.zoomOut');
+            this._trackAnalyticsEvent('userControls', 'zoomOut');
         },
 
         /**
@@ -1376,6 +1432,7 @@
          */
         _locateUser: function () {
             this.options.vent.trigger('userControls.locateUser', this.options.locateUserMaxZoom);
+            this._trackAnalyticsEvent('userControls', 'locateUser');
         },
 
         /**
@@ -1384,9 +1441,12 @@
          */
         _toggleMapLayerFilters: function () {
             // Toggle the mapLayerFiltersOpen value.
-            this.model.set('mapLayerFiltersOpen', this.model.get('mapLayerFiltersOpen') === false);
+            var mapFiltersOpen = this.model.get('mapLayerFiltersOpen') === false;
+            this.model.set('mapLayerFiltersOpen', mapFiltersOpen);
 
             $('body').toggleClass('tools-active');
+
+            this._trackAnalyticsEvent('userControls', 'toggleMapLayerToolbox', (mapFiltersOpen === true ? 'opened' : 'closed'));
         },
 
         /**
@@ -1395,7 +1455,12 @@
          * @desc Trigger an events which toggles a map layer.
          */
         _toggleMapLayer: function (e) {
-            this.options.vent.trigger('userControls.toggleMapLayer', Backbone.$(e.currentTarget).data('layer'));
+            var selectedLayer = Backbone.$(e.currentTarget).data('layer'),
+                checked = $(e.currentTarget).is(':checked');
+
+            this.options.vent.trigger('userControls.toggleMapLayer', selectedLayer);
+
+            this._trackAnalyticsEvent('userControls', 'toggleMapLayer-' + selectedLayer, (checked ? 'show' : 'hide'));
         },
 
         /**
