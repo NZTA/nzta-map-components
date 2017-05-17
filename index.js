@@ -10,7 +10,8 @@
         _ = require('underscore'),
         Cocktail = require('backbone.cocktail'),
         L = global.L = require('leaflet'),
-        geoJsonExtent = require('geojson-extent');
+        geoJsonExtent = require('geojson-extent'),
+        MarkerClusterer = require('js-marker-clusterer');
 
     Backbone.$ = require('jquery');
     Backbone.Marionette = require('backbone.marionette');
@@ -160,19 +161,22 @@
 
     var eventsMixin = {
         initialize: function () {
-            // Add hook for routing
-            this.listenTo(router, 'route', function (handler, params) {
-                if (typeof this._onRoute === 'function') {
-                    this._onRoute(handler, params);
-                }
+            // Add hook for routings
+            this.listenTo(this.options.vent, 'map.loaded', function() {
+                this.listenTo(router, 'route', function (handler, params) {
+                    if (typeof this._onRoute === 'function') {
+                        this._onRoute(handler, params);
+                    }
+                }, this);
+
+                // Add hook for new data becoming available.
+                this.listenTo(this.options.vent, 'map.update.all', function (features) {
+                    if (typeof this._onMapData === 'function') {
+                        this._onMapData(features);
+                    }
+                }, this);
             }, this);
 
-            // Add hook for new data becoming available.
-            this.listenTo(this.options.vent, 'map.update.all', function (features) {
-                if (typeof this._onMapData === 'function') {
-                    this._onMapData(features);
-                }
-            }, this);
         }
     };
 
@@ -430,7 +434,7 @@
                 vent: this.options.vent
             };
 
-            var initOptions = $.extend(defOptions, options),
+            var initOptions = Backbone.$.extend(defOptions, options),
                 panelView = new ViewConstructor(initOptions),
                 models;
 
@@ -869,6 +873,18 @@
         template: false,
 
         /**
+         * Set to true once external map api script loaded
+         */
+        mapLoaded: false,
+
+        /**
+         * Set to true while while external map script is being loaded
+         */
+        mapLoading: false,
+
+        apiScriptUrl: 'https://maps.googleapis.com/maps/api/js?key={apiKey}',
+      
+        /**
          * @func initialize
          * @param {object} options
          * @param {object} options.model - Backbone.Model instance.
@@ -885,8 +901,18 @@
 
             this._addMap();
 
-            // Remove default map controls
-            this.map.removeControl(this.map.zoomControl);
+            this.listenTo(this.options.vent, 'map.loaded', function () {
+                // Log analytics event whenever any zoom ends (e.g. when the zoomIn button is clicked, if a cluster or icon
+                // is clicked on and the map zooms in, and if the user manually zooms in using for example the scroll wheel
+                var mapViewComponent = this;
+                this.map.addListener('zoom_changed', function() {
+                    mapViewComponent._trackAnalyticsEvent('mapView', 'mapZoomLevelChanged');
+                });
+
+                this.map.addListener('dragend', function() {
+                    mapViewComponent._trackAnalyticsEvent('mapView', 'mapDragged');
+                });
+            }, this);
 
             this.listenTo(this.options.vent, 'userControls.zoomIn', function () {
                 this._zoomIn();
@@ -928,15 +954,20 @@
                 this.options.vent.trigger('map.update.all', features);
             }, this);
 
-            // Log analytics event whenever any zoom ends (e.g. when the zoomIn button is clicked, if a cluster or icon
-            // is clicked on and the map zooms in, and if the user manually zooms in using for example the scroll wheel
-            var mapViewComponent = this;
-            this.map.on('zoomend', function() {
-                mapViewComponent._trackAnalyticsEvent('mapView', 'mapZoomLevelChanged');
-            });
+        },
 
-            this.map.on('dragend', function() {
-                mapViewComponent._trackAnalyticsEvent('mapView', 'mapDragged');
+
+        _loadMapScript: function (options) {
+            var self = this,
+                libraries = (options !== void 0 && options.libraries !== void 0) ? options.libraries : [],
+                mapUrl = this.apiScriptUrl.replace('{apiKey}', options.apiKey) +
+                    (libraries.length ? '&libraries=' + options.libraries.join(',') : '');
+
+            this.mapLoading = true;
+
+            Backbone.$.getScript(mapUrl, function() {
+                this.mapLoading = false;
+                self._addMap(options);
             });
         },
 
@@ -955,14 +986,28 @@
          * @desc Add a Leaflet map to the MapView.
          */
         _addMap: function (options) {
-            var bounds = (options !== void 0 && options.bounds !== void 0) ? options.bounds : [-40.866119, 174.143780],
-                zoom = (options !== void 0 && options.zoom !== void 0) ? options.zoom : 5,
-                tileLayer = (options !== void 0 && options.tileLayer !== void 0) ? options.tileLayer : 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+            var self = this,
+                bounds = (options !== void 0 && options.bounds !== void 0) ? options.bounds : [-40.866119, 174.143780],
+                zoom = (options !== void 0 && options.zoom !== void 0) ? options.zoom : 5;
+
+                // tileLayer = (options !== void 0 && options.tileLayer !== void 0) ? options.tileLayer : 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+
+            if (!this.mapLoaded && !this.mapLoading) {
+                this._loadMapScript(options);
+                return null;
+            } else if (!this.mapLoaded && google !== void 0) {
+                this.mapLoaded = true;
+            } else {
+                setTimeout(function () {
+                    self._addMap(options);
+                }, 100);
+            }
 
             var opt = {
-                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 18,
-                zIndex: 10
+                center: new google.maps.LatLng(bounds[0], bounds[1]),
+                zoom: zoom,
+                disableDefaultUI: true
             };
 
             var mapOpt = {};
@@ -971,25 +1016,14 @@
                 opt.maxZoom = options.maxZoom;
             }
 
-            if (options !== void 0 && options.zIndex !== void 0) {
-                opt.zIndex = options.zIndex;
-            }
-
-            if (options !== void 0 && options.subdomains !== void 0) {
-                opt.subdomains = options.subdomains;
-            }
-
-            if (options !== void 0 && options.attribution !== void 0) {
-                opt.attribution = options.attribution;
-            }
-
             if (options !== void 0 && options.scrollWheelZoom !== void 0) {
                 mapOpt.scrollWheelZoom = options.scrollWheelZoom;
             }
 
-            this.map = L.map('map', mapOpt).setView(bounds, zoom);
+            this.map = new google.maps.Map(document.getElementById('map'), opt);
+            this.options.vent.trigger('map.loaded');
 
-            L.tileLayer(tileLayer, opt).addTo(this.map);
+            // L.tileLayer(tileLayer, opt).addTo(this.map);
 
             return this.map;
         },
@@ -1030,7 +1064,7 @@
          * @desc Zoom the map in one level.
          */
         _zoomIn: function () {
-            this.map.zoomIn();
+            this.map.setZoom(Math.min(16, this.map.getZoom() + 1));
         },
 
         /**
@@ -1038,7 +1072,7 @@
          * @desc Zoom the map out one level.
          */
         _zoomOut: function () {
-            this.map.zoomOut();
+            this.map.setZoom(Math.max(1, this.map.getZoom() - 1));
         },
 
         /**
@@ -1056,8 +1090,14 @@
          * @desc Set the map's bounds.
          */
         _setMapBounds: function (northingEasting, options) {
-            var options = (options !== void 0 ? options : {});
-            this.map.fitBounds(northingEasting, options);
+            var options = (options !== void 0 ? options : {}),
+                bounds = new google.maps.LatLngBounds();
+
+            for (var i = 0; i < northingEasting.length; i++) {
+                bounds.extend(new google.maps.LatLng(northingEasting[i][0], northingEasting[i][1]));
+            }
+
+            this.map.fitBounds(bounds);
         },
 
         /**
@@ -1141,49 +1181,122 @@
         _updateMapLayer: function (layerId) {
             var geoJsonCollection = this.model[layerId],
                 mapLayer = this._getMapLayerById(layerId),
-                geoJsonLayer,
+                geoJsonLayer = {
+                    'type': 'FeatureCollection',
+                    'features': []
+                },
                 self = this;
 
             // Remove the current cluster group if it exists, so we don't end up with
             // multiple cluster groups displaying the same data.
-            this._removeMapLayer(layerId);
+            // this._removeMapLayer(layerId);
 
-            geoJsonLayer = L.geoJson(null, {
-                pointToLayer: function(feature, latlng) {
-                    var icon = geoJsonCollection._icon;
-
-                    if(icon === void 0 || !icon) {
-                        icon = L.icon({
-                            iconUrl: geoJsonCollection._iconUrl,
-                            iconSize: geoJsonCollection._iconSize,
-                            iconAnchor: geoJsonCollection._iconAnchor
-                        });
-                    }
-
-                    return L.marker(latlng, { icon: icon, zIndexOffset: geoJsonCollection._zIndexOffset });
-                },
-                // Add a click handler to each feature marker.
-                onEachFeature: function (feature, layer) {
-                    if(geoJsonCollection._click !== false) {
-                        layer.on('click', function () {
-                            var location = ((feature !== void 0 && feature.properties !== void 0 && feature.properties.regions !== void 0 && feature.properties.regions[0] !== void 0) ? feature.properties.regions[0].name : '');
-                            self._trackAnalyticsEvent('mapView', 'layerClick-' + location + '-' + layerId, feature.properties.id);
-                            if(!self._isPopupRoute(Backbone.history.fragment.split("/"))) {
-                                NZTAComponents.router._previousFragment = Backbone.history.fragment;
-                            }
-                            NZTAComponents.router.navigate(layerId + '/' + feature.properties.id, { trigger: true });
-                        });
-                    }
-                },
-                style: geoJsonCollection._style
-            });
-
+            mapLayer.markers.clearMarkers();
+            console.log(geoJsonCollection);
             // Add each geoJson feature to the new layer.
             _.each(geoJsonCollection.models, function (geoJsonModel) {
-                geoJsonLayer.addData(geoJsonModel.attributes);
+                //manually add points to marker clusterer
+                if (geoJsonModel.attributes.geometry.type === 'Point') {
+                    mapLayer.markers.addMarker(self._getMarker(geoJsonModel.attributes, geoJsonCollection, layerId));
+                } else {
+                    geoJsonLayer.features.push(geoJsonModel.attributes);
+                }
             });
 
-            mapLayer.markers.addLayer(geoJsonLayer);
+            mapLayer.geoJson.addGeoJson(geoJsonLayer);
+            mapLayer.markers.redraw();
+        },
+
+        /**
+         * Return icon fields in a consistent format
+         *
+         * @param geoJsonCollection
+         * @returns {{}}
+         * @private
+         */
+        _getIconFields: function(geoJsonCollection) {
+            var icon = {};
+
+            if (geoJsonCollection._icon !== void 0 && geoJsonCollection._icon) {
+                icon = {
+                    url: geoJsonCollection._icon.iconUrl,
+                    size: {
+                        width: geoJsonCollection._icon.iconSize[0],
+                        height: geoJsonCollection._icon.iconSize[1]
+                    },
+                    anchor: {
+                        left: geoJsonCollection._icon.iconAnchor[0],
+                        top: geoJsonCollection._icon.iconAnchor[1]
+                    },
+                    clusterUrl: geoJsonCollection._icon.shadowUrl,
+                    clusterSize: {
+                        width: geoJsonCollection._icon.shadowSize[0],
+                        height: geoJsonCollection._icon.shadowSize[1]
+                    },
+                    clusterAnchor: {
+                        left: geoJsonCollection._icon.shadowAnchor[0],
+                        top: geoJsonCollection._icon.shadowAnchor[1]
+                    }
+                };
+            } else {
+                icon = {
+                    url: geoJsonCollection._iconUrl,
+                    size: {
+                        width: geoJsonCollection._iconSize[0],
+                        height: geoJsonCollection._iconSize[1]
+                    },
+                    anchor: {
+                        left: geoJsonCollection._iconAnchor[0],
+                        top: geoJsonCollection._iconAnchor[1]
+                    },
+                    clusterUrl: geoJsonCollection._iconUrl.replace('.', '-cluster.'),
+                    clusterSize: {
+                        width: geoJsonCollection._iconSize[0],
+                        height: geoJsonCollection._iconSize[1]
+                    },
+                    clusterAnchor: {
+                        left: geoJsonCollection._iconAnchor[0],
+                        top: geoJsonCollection._iconAnchor[1]
+                    }
+                }
+            }
+
+            icon.zIndex = geoJsonCollection._zIndexOffset;
+            icon.cssClass = geoJsonCollection._iconClass;
+
+            return icon;
+        },
+
+        _getMarker: function (feature, geoJsonCollection, layerId) {
+            if (feature.geometry.type !== 'Point') console.log(feature);
+            var self = this,
+                iconFields = this._getIconFields(geoJsonCollection),
+                marker = new google.maps.Marker({
+                    map: this.map,
+                    // geometry is lng, lat - google maps expects lat, lng
+                    position: new google.maps.LatLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]),
+                    icon: {
+                            url: iconFields.url,
+                            scaledSize: new google.maps.Size(iconFields.size.width, iconFields.size.height),
+                            anchor: new google.maps.Point(iconFields.anchor.left, iconFields.anchor.top)
+                        },
+                    zIndex: iconFields.zIndex
+                });
+
+            //style: geoJsonCollection._style
+
+            if(geoJsonCollection._click !== false) {
+                marker.addListener('click', function () {
+                    var location = ((feature !== void 0 && feature.properties !== void 0 && feature.properties.regions !== void 0 && feature.properties.regions[0] !== void 0) ? feature.properties.regions[0].name : '');
+                    self._trackAnalyticsEvent('mapView', 'layerClick-' + location + '-' + layerId, feature.properties.id);
+                    if(!self._isPopupRoute(Backbone.history.fragment.split("/"))) {
+                        NZTAComponents.router._previousFragment = Backbone.history.fragment;
+                    }
+                    NZTAComponents.router.navigate(layerId + '/' + feature.properties.id, { trigger: true });
+                });
+            }
+
+            return marker;
         },
 
         /**
@@ -1193,20 +1306,60 @@
          * // 'cameras'
          */
         _addMapLayer: function (layerId) {
-            var geoJsonCollection = this.model[layerId],
-                mapLayer = {};
+            var self = this,
+                geoJsonCollection = this.model[layerId],
+                mapLayer = {},
+                iconFields = this._getIconFields(geoJsonCollection),
+                clusterStyle = {
+                    textColor: 'white',
+                    textSize: 12,
+                    url: iconFields.clusterUrl,
+                    width: iconFields.clusterSize.width,
+                    height: iconFields.clusterSize.height,
+                    cssClass: iconFields.cssClass
+                };
+
+            // console.log(style, geoJsonCollection);
 
             mapLayer.id = layerId;
-            mapLayer.markers = L.markerClusterGroup({ 
-                showCoverageOnHover: false,
-                iconCreateFunction: function (cluster) {
-                    var html = '<div class="' + geoJsonCollection._iconClass + '"><div class="cluster-count">' + cluster.getChildCount() + '</div></div>';
+            mapLayer.geoJson = new google.maps.Data();
+            mapLayer.geoJson.setMap(this.map);
 
-                    return L.divIcon({html: html});
-                }
+            // add styles
+            if (geoJsonCollection._style) {
+                mapLayer.geoJson.setStyle(geoJsonCollection._style);
+            }
+
+            // add click handler for geojson layer
+            if(geoJsonCollection._click !== false) {
+                mapLayer.geoJson.addListener('click', function (event) {
+                    var feature = event.feature,
+                        regions = feature.getProperty('regions'),
+                        location = ((regions !== void 0 && regions[0] !== void 0) ? regions[0].name : '');
+                    self._trackAnalyticsEvent('mapView', 'layerClick-' + location + '-' + layerId, feature.getProperty('id'));
+                    if(!self._isPopupRoute(Backbone.history.fragment.split("/"))) {
+                        NZTAComponents.router._previousFragment = Backbone.history.fragment;
+                    }
+                    NZTAComponents.router.navigate(layerId + '/' + feature.getProperty('id'), { trigger: true });
+                });
+            }
+
+            // make line bolder when moused over
+            mapLayer.geoJson.addListener('mouseover', function (event) {
+                mapLayer.geoJson.overrideStyle(event.feature, {strokeWeight: 5});
             });
 
-            this.map.addLayer(mapLayer.markers);
+            // revert to original styles
+            mapLayer.geoJson.addListener('mouseover', function (event) {
+                mapLayer.geoJson.revertStyle();
+            });
+
+            // setup marker clusterer
+            mapLayer.markers = new MarkerClusterer(this.map, [], {
+                gridSize: 30,
+                maxZoom: 16,
+                styles: [clusterStyle]
+            });
 
             this.mapLayers.push(mapLayer);
 
