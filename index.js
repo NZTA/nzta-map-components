@@ -9,18 +9,15 @@
     var Backbone = require('backbone'),
         _ = require('underscore'),
         Cocktail = require('backbone.cocktail'),
-        L = global.L = require('leaflet'),
-        geoJsonExtent = require('geojson-extent'),
-        MarkerClusterer = require('js-marker-clusterer');
+        geoJsonExtent = require('geojson-extent');
+        MarkerClusterer = require('marker-clusterer-plus');
 
     Backbone.$ = require('jquery');
     Backbone.Marionette = require('backbone.marionette');
 
-    require('leaflet.markercluster');
+    module.exports = factory(Backbone, _, Cocktail, geoJsonExtent);
 
-    module.exports = factory(Backbone, _, Cocktail, L, geoJsonExtent);
-
-}(window, function (Backbone, _, Cocktail, L, geoJsonExtent) {
+}(window, function (Backbone, _, Cocktail, geoJsonExtent) {
 
     var NZTAComponents = {};
 
@@ -168,6 +165,9 @@
                         this._onRoute(handler, params);
                     }
                 }, this);
+
+                //load starting url
+                Backbone.history.loadUrl();
 
                 // Add hook for new data becoming available.
                 this.listenTo(this.options.vent, 'map.update.all', function (features) {
@@ -576,17 +576,14 @@
     NZTAComponents.GeoJsonCollection = Backbone.Collection.extend({
 
         _setOptions: function(options) {
-            this._clusterRadius = (options !== void 0 && options.radius !== void 0) ? options.radius : 8;
-            this._clusterFillColor = (options !== void 0 && options.fillColor !== void 0) ? options.fillColor : 'transparent';
-            this._clusterColor = (options !== void 0 && options.color !== void 0) ? options.color : 'transparent';
-            this._clusterWeight = (options !== void 0 && options.weight !== void 0) ? options.weight : 1;
-            this._clusterOpacity = (options !== void 0 && options.opacity !== void 0) ? options.opacity : 1;
-            this._clusterFillOpacity = (options !== void 0 && options.fillOpacity !== void 0) ? options.fillOpacity : 0.8;
             this._icon = (options !== void 0 && options.icon !== void 0) ? options.icon : null;
             this._iconClass = (options !== void 0 && options.iconClass !== void 0) ? options.iconClass : 'cluster-icon';
             this._iconUrl = (options !== void 0 && options.iconUrl !== void 0) ? options.iconUrl : '';
             this._iconSize = (options !== void 0 && options.iconSize !== void 0) ? options.iconSize : [26, 34];
             this._iconAnchor = (options !== void 0 && options.iconAnchor !== void 0) ? options.iconAnchor : [13, 34];
+            this._clusterIconUrl = (options !== void 0 && options.clusterIconUrl !== void 0) ? options.clusterIconUrl : '';
+            this._clusterIconSize = (options !== void 0 && options.clusterIconSize !== void 0) ? options.clusterIconSize : [26, 34];
+            this._clusterIconAnchor = (options !== void 0 && options.clusterIconAnchor !== void 0) ? options.clusterIconAnchor : [13, 34];
             this._style = (options !== void 0 && options.style !== void 0) ? options.style : null;
             this._click = (options !== void 0 && options.click !== void 0) ? options.click : null;
             this._zIndexOffset = (options !== void 0 && options.zIndexOffset !== void 0) ? options.zIndexOffset : 0;
@@ -957,6 +954,11 @@
         },
 
 
+        /**
+         *
+         * @param {{}} options
+         * @private
+         */
         _loadMapScript: function (options) {
             var self = this,
                 libraries = (options !== void 0 && options.libraries !== void 0) ? options.libraries : [],
@@ -965,6 +967,10 @@
 
             this.mapLoading = true;
 
+            // get library for google.loader.ClientLocation
+            Backbone.$.getScript('https://www.google.com/jsapi');
+
+            // get google maps api
             Backbone.$.getScript(mapUrl, function() {
                 this.mapLoading = false;
                 self._addMap(options);
@@ -1080,8 +1086,67 @@
          * @desc Move the map to the user's current location.
          */
         _locateUser: function (maxZoom) {
-            var maxZoom = (maxZoom !== void 0 ? maxZoom : this.map.getZoom());
-            this.map.locate({ setView: true, maxZoom: maxZoom });
+            var self = this,
+                maxZoom = (maxZoom !== void 0 ? maxZoom : this.map.getZoom());
+
+            this._findUserLocation(function (location) {
+                self.map.setCenter(location);
+                self.map.setZoom(maxZoom);
+            });
+        },
+
+        /**
+         * Try and find the users location, try html5 geolocation first, fallback to google.loader.ClientLocation
+         *
+         * @returns {LatLng|L.LatLng}
+         * @private
+         */
+        _findUserLocation: function(callback) {
+            var self = this;
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    // we got a location
+                    function (pos) {
+                        callback(new google.maps.LatLng(
+                            pos.coords.latitude,
+                            pos.coords.longitude
+                        ));
+                    },
+                    // it failed
+                    function () {
+                        var location = self._fallbackFindUserLocation();
+
+                        if (location) {
+                            callback(location);
+                        }
+                    }
+                );
+            }
+
+            var location = self._fallbackFindUserLocation();
+
+            if (location) {
+                callback(location);
+            }
+
+        },
+
+        /**
+         * Fallback if html5 geolocation fails, uses google.loader.ClientLocation to find user's location
+         *
+         * @func _fallbackFindUserLocation
+         * @returns {LatLng|L.LatLng}
+         * @private
+         */
+        _fallbackFindUserLocation: function() {
+            if (google.loader.ClientLocation) {
+                console.log('google client location');
+                return new google.maps.LatLng(
+                    google.loader.ClientLocation.latitude,
+                    google.loader.ClientLocation.longitude
+                );
+            }
         },
 
         /**
@@ -1189,102 +1254,50 @@
 
             // Remove the current cluster group if it exists, so we don't end up with
             // multiple cluster groups displaying the same data.
-            // this._removeMapLayer(layerId);
+            this._removeMapLayer(layerId);
 
-            mapLayer.markers.clearMarkers();
-            console.log(geoJsonCollection);
             // Add each geoJson feature to the new layer.
             _.each(geoJsonCollection.models, function (geoJsonModel) {
-                //manually add points to marker clusterer
+                // manually add points to marker clusterer
                 if (geoJsonModel.attributes.geometry.type === 'Point') {
-                    mapLayer.markers.addMarker(self._getMarker(geoJsonModel.attributes, geoJsonCollection, layerId));
+                    mapLayer.markers.addMarker(self._getMarker(geoJsonModel.attributes, geoJsonCollection, layerId), true);
                 } else {
                     geoJsonLayer.features.push(geoJsonModel.attributes);
                 }
             });
 
             mapLayer.geoJson.addGeoJson(geoJsonLayer);
-            mapLayer.markers.redraw();
+            mapLayer.markers.repaint();
         },
 
         /**
-         * Return icon fields in a consistent format
+         * Get a google maps marker
          *
-         * @param geoJsonCollection
-         * @returns {{}}
+         * @func _getMarker
+         * @param {{}} feature Feature to add marker for
+         * @param {NZTAComponents.GeoJsonCollection} geoJsonCollection Collection feature belongs to
+         * @param {number} layerId Id for layer feature belongs to
+         * @returns {google.maps.Marker}
          * @private
          */
-        _getIconFields: function(geoJsonCollection) {
-            var icon = {};
-
-            if (geoJsonCollection._icon !== void 0 && geoJsonCollection._icon) {
-                icon = {
-                    url: geoJsonCollection._icon.iconUrl,
-                    size: {
-                        width: geoJsonCollection._icon.iconSize[0],
-                        height: geoJsonCollection._icon.iconSize[1]
-                    },
-                    anchor: {
-                        left: geoJsonCollection._icon.iconAnchor[0],
-                        top: geoJsonCollection._icon.iconAnchor[1]
-                    },
-                    clusterUrl: geoJsonCollection._icon.shadowUrl,
-                    clusterSize: {
-                        width: geoJsonCollection._icon.shadowSize[0],
-                        height: geoJsonCollection._icon.shadowSize[1]
-                    },
-                    clusterAnchor: {
-                        left: geoJsonCollection._icon.shadowAnchor[0],
-                        top: geoJsonCollection._icon.shadowAnchor[1]
-                    }
-                };
-            } else {
-                icon = {
-                    url: geoJsonCollection._iconUrl,
-                    size: {
-                        width: geoJsonCollection._iconSize[0],
-                        height: geoJsonCollection._iconSize[1]
-                    },
-                    anchor: {
-                        left: geoJsonCollection._iconAnchor[0],
-                        top: geoJsonCollection._iconAnchor[1]
-                    },
-                    clusterUrl: geoJsonCollection._iconUrl.replace('.', '-cluster.'),
-                    clusterSize: {
-                        width: geoJsonCollection._iconSize[0],
-                        height: geoJsonCollection._iconSize[1]
-                    },
-                    clusterAnchor: {
-                        left: geoJsonCollection._iconAnchor[0],
-                        top: geoJsonCollection._iconAnchor[1]
-                    }
-                }
-            }
-
-            icon.zIndex = geoJsonCollection._zIndexOffset;
-            icon.cssClass = geoJsonCollection._iconClass;
-
-            return icon;
-        },
-
         _getMarker: function (feature, geoJsonCollection, layerId) {
-            if (feature.geometry.type !== 'Point') console.log(feature);
             var self = this,
-                iconFields = this._getIconFields(geoJsonCollection),
                 marker = new google.maps.Marker({
                     map: this.map,
                     // geometry is lng, lat - google maps expects lat, lng
                     position: new google.maps.LatLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]),
                     icon: {
-                            url: iconFields.url,
-                            scaledSize: new google.maps.Size(iconFields.size.width, iconFields.size.height),
-                            anchor: new google.maps.Point(iconFields.anchor.left, iconFields.anchor.top)
+                            url: geoJsonCollection._iconUrl,
+                            scaledSize: new google.maps.Size(
+                                geoJsonCollection._iconSize[0],
+                                geoJsonCollection._iconSize[1]
+                            ),
+                            anchor: new google.maps.Point(geoJsonCollection._iconAnchor[0], geoJsonCollection._iconAnchor[1])
                         },
-                    zIndex: iconFields.zIndex
+                    zIndex: geoJsonCollection._zIndexOffset
                 });
 
-            //style: geoJsonCollection._style
-
+            // add click handler for marker
             if(geoJsonCollection._click !== false) {
                 marker.addListener('click', function () {
                     var location = ((feature !== void 0 && feature.properties !== void 0 && feature.properties.regions !== void 0 && feature.properties.regions[0] !== void 0) ? feature.properties.regions[0].name : '');
@@ -1309,14 +1322,13 @@
             var self = this,
                 geoJsonCollection = this.model[layerId],
                 mapLayer = {},
-                iconFields = this._getIconFields(geoJsonCollection),
                 clusterStyle = {
                     textColor: 'white',
                     textSize: 12,
-                    url: iconFields.clusterUrl,
-                    width: iconFields.clusterSize.width,
-                    height: iconFields.clusterSize.height,
-                    cssClass: iconFields.cssClass
+                    url: geoJsonCollection._clusterIconUrl,
+                    width: geoJsonCollection._clusterIconSize[0],
+                    height: geoJsonCollection._clusterIconSize[1],
+                    anchorText: [-3, 0] //move text up 3px
                 };
 
             // console.log(style, geoJsonCollection);
@@ -1346,18 +1358,37 @@
 
             // make line bolder when moused over
             mapLayer.geoJson.addListener('mouseover', function (event) {
-                mapLayer.geoJson.overrideStyle(event.feature, {strokeWeight: 5});
+                mapLayer.geoJson.revertStyle();
+
+                // if we have an object and existing strokeWeight, increase by two
+                if (typeof geoJsonCollection._style === 'object' && geoJsonCollection._style.strokeWeight) {
+                    // let's not override the original for unexpected results
+                    var newStyles = _.extend({}, geoJsonCollection._style, {strokeWeight: geoJsonCollection._style.strokeWeight + 2});
+                    mapLayer.geoJson.overrideStyle(event.feature, newStyles);
+
+                    // if we have a function, call it then modify the stroke weight
+                } else if (typeof geoJsonCollection._style === 'function') {
+                    var existingStyles = geoJsonCollection._style(event.feature);
+
+                    if (typeof existingStyles === 'object' && existingStyles.strokeWeight) {
+                        var newStyles = _.extend({}, existingStyles, {strokeWeight: existingStyles.strokeWeight + 2});
+                        mapLayer.geoJson.overrideStyle(event.feature, newStyles);
+                    }
+                }
+
             });
 
             // revert to original styles
-            mapLayer.geoJson.addListener('mouseover', function (event) {
+            mapLayer.geoJson.addListener('mouseout', function (event) {
                 mapLayer.geoJson.revertStyle();
             });
 
             // setup marker clusterer
             mapLayer.markers = new MarkerClusterer(this.map, [], {
-                gridSize: 30,
+                gridSize: 70,
                 maxZoom: 16,
+                clusterClass: geoJsonCollection._iconClass,
+                enableRetinaIcons: true,
                 styles: [clusterStyle]
             });
 
@@ -1375,7 +1406,12 @@
         _removeMapLayer: function (layerId) {
             var geoJsonLayer = this._getMapLayerById(layerId);
 
-            geoJsonLayer.markers.clearLayers();
+            if (typeof geoJsonLayer !== 'undefined') {
+                geoJsonLayer.markers.clearMarkers();
+                geoJsonLayer.geoJson.forEach(function (feature) {
+                    geoJsonLayer.geoJson.remove(feature);
+                });
+            }
         },
 
         _mapLayerVisible: function (layerId) {
@@ -1387,9 +1423,7 @@
                 return false;
             }
 
-            markersArray = mapLayer.markers.getLayers();
-
-            return mapLayer !== void 0 && markersArray.length > 0;
+            return mapLayer !== void 0 && mapLayer.markers.getTotalMarkers();
         },
 
         _startPolling: function (force, init) {
@@ -1597,7 +1631,7 @@
             var mapFiltersOpen = this.model.get('mapLayerFiltersOpen') === false;
             this.model.set('mapLayerFiltersOpen', mapFiltersOpen);
 
-            $('body').toggleClass('tools-active');
+            Backbone.$('body').toggleClass('tools-active');
 
             this._trackAnalyticsEvent('userControls', 'toggleMapLayerToolbox', (mapFiltersOpen === true ? 'opened' : 'closed'));
         },
