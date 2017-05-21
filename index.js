@@ -971,10 +971,14 @@
             Backbone.$.getScript('https://www.google.com/jsapi');
 
             // get google maps api
-            Backbone.$.getScript(mapUrl, function() {
-                this.mapLoading = false;
-                self._addMap(options);
-            });
+            Backbone.$.getScript(mapUrl)
+                .done(function() {
+                    this.mapLoading = false;
+                    self._addMap(options);
+                })
+                .fail(function() {
+                    throw new Exception('Failed to load google maps api');
+                });
         },
 
         /**
@@ -983,34 +987,24 @@
          * @param {array} [options.bounds] - Northing-easting to set the map view.
          * @param {integer} [options.zoom] - Initial zoom level.
          * @param {integer} [options.maxZoom] - Maximum zoom level.
-         * @param {integer} [options.zIndex] - z-index for the map.
-         * @param {string} [options.tileLayer] - Tile layer URI.
-         * @param {array} [options.subdomains] - Tile layer sub domains.
-         * @param {string} [options.attribution] - Map attribution.
          * @param {string} [options.scrollWheelZoom] - Map scrollWheelZoom.
-         * @return Leaflet map instance.
-         * @desc Add a Leaflet map to the MapView.
+         * @desc Add a Google map to the MapView.
          */
         _addMap: function (options) {
             var self = this,
                 bounds = (options !== void 0 && options.bounds !== void 0) ? options.bounds : [-40.866119, 174.143780],
-                zoom = (options !== void 0 && options.zoom !== void 0) ? options.zoom : 5;
-
-                // tileLayer = (options !== void 0 && options.tileLayer !== void 0) ? options.tileLayer : 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+                zoom = (options !== void 0 && options.zoom !== void 0) ? options.zoom : 5,
+                maxZoom = (options !== void 0 && options.maxZoom !== void 0) ? options.maxZoom : 18;
 
             if (!this.mapLoaded && !this.mapLoading) {
                 this._loadMapScript(options);
-                return null;
+                return;
             } else if (!this.mapLoaded && google !== void 0) {
                 this.mapLoaded = true;
-            } else {
-                setTimeout(function () {
-                    self._addMap(options);
-                }, 100);
             }
 
             var opt = {
-                maxZoom: 18,
+                maxZoom: maxZoom,
                 center: new google.maps.LatLng(bounds[0], bounds[1]),
                 zoom: zoom,
                 disableDefaultUI: true
@@ -1023,15 +1017,11 @@
             }
 
             if (options !== void 0 && options.scrollWheelZoom !== void 0) {
-                mapOpt.scrollWheelZoom = options.scrollWheelZoom;
+                opt.scrollwheel = options.scrollWheelZoom;
             }
 
-            this.map = new google.maps.Map(document.getElementById('map'), opt);
+            this.map = new google.maps.Map(Backbone.$(this.el).get(0), opt);
             this.options.vent.trigger('map.loaded');
-
-            // L.tileLayer(tileLayer, opt).addTo(this.map);
-
-            return this.map;
         },
 
         /**
@@ -1070,7 +1060,7 @@
          * @desc Zoom the map in one level.
          */
         _zoomIn: function () {
-            this.map.setZoom(Math.min(16, this.map.getZoom() + 1));
+            this.map.setZoom(Math.min(18, this.map.getZoom() + 1));
         },
 
         /**
@@ -1098,7 +1088,7 @@
         /**
          * Try and find the users location, try html5 geolocation first, fallback to google.loader.ClientLocation
          *
-         * @returns {LatLng|L.LatLng}
+         * @returns {google.maps.LatLng}
          * @private
          */
         _findUserLocation: function(callback) {
@@ -1124,24 +1114,23 @@
                 );
             }
 
+            // if no geolocation, use fallback to try and get the user's location
             var location = self._fallbackFindUserLocation();
 
             if (location) {
                 callback(location);
             }
-
         },
 
         /**
          * Fallback if html5 geolocation fails, uses google.loader.ClientLocation to find user's location
          *
          * @func _fallbackFindUserLocation
-         * @returns {LatLng|L.LatLng}
+         * @returns {google.maps.LatLng}
          * @private
          */
         _fallbackFindUserLocation: function() {
             if (google.loader.ClientLocation) {
-                console.log('google client location');
                 return new google.maps.LatLng(
                     google.loader.ClientLocation.latitude,
                     google.loader.ClientLocation.longitude
@@ -1256,11 +1245,13 @@
             // multiple cluster groups displaying the same data.
             this._removeMapLayer(layerId);
 
-            // Add each geoJson feature to the new layer.
+            // Add each geoJson feature to the new layer, separate points to add to clusterer
             _.each(geoJsonCollection.models, function (geoJsonModel) {
                 // manually add points to marker clusterer
                 if (geoJsonModel.attributes.geometry.type === 'Point') {
                     mapLayer.markers.addMarker(self._getMarker(geoJsonModel.attributes, geoJsonCollection, layerId), true);
+
+                    // add to geojson
                 } else {
                     geoJsonLayer.features.push(geoJsonModel.attributes);
                 }
@@ -1330,8 +1321,6 @@
                     height: geoJsonCollection._clusterIconSize[1],
                     anchorText: [-3, 0] //move text up 3px
                 };
-
-            // console.log(style, geoJsonCollection);
 
             mapLayer.id = layerId;
             mapLayer.geoJson = new google.maps.Data();
@@ -1407,7 +1396,9 @@
             var geoJsonLayer = this._getMapLayerById(layerId);
 
             if (typeof geoJsonLayer !== 'undefined') {
+                // remove markers
                 geoJsonLayer.markers.clearMarkers();
+                // remove each geojson feature
                 geoJsonLayer.geoJson.forEach(function (feature) {
                     geoJsonLayer.geoJson.remove(feature);
                 });
