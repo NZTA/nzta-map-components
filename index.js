@@ -875,7 +875,7 @@
         mapLoaded: false,
 
         /**
-         * Set to true while while external map script is being loaded
+         * True while map api is being loaded, set to false once loaded
          */
         mapLoading: false,
 
@@ -957,13 +957,15 @@
         /**
          *
          * @param {{}} options
+         * @param {options.mapUrl} Url to load google maps api, should contain key, libraries etc
          * @private
          */
         _loadMapScript: function (options) {
-            var self = this,
-                libraries = (options !== void 0 && options.libraries !== void 0) ? options.libraries : [],
-                mapUrl = this.apiScriptUrl.replace('{apiKey}', options.apiKey) +
-                    (libraries.length ? '&libraries=' + options.libraries.join(',') : '');
+            var self = this;
+
+            if (typeof options.mapUrl === 'undefined') {
+                throw new Error('No url provided for google maps api');
+            }
 
             this.mapLoading = true;
 
@@ -971,13 +973,14 @@
             Backbone.$.getScript('https://www.google.com/jsapi');
 
             // get google maps api
-            Backbone.$.getScript(mapUrl)
+            Backbone.$.getScript(options.mapUrl)
                 .done(function() {
                     this.mapLoading = false;
+                    this.mapLoaded = true;
                     self._addMap(options);
                 })
                 .fail(function() {
-                    throw new Exception('Failed to load google maps api');
+                    throw new Error('Failed to load google maps api');
                 });
         },
 
@@ -999,29 +1002,25 @@
             if (!this.mapLoaded && !this.mapLoading) {
                 this._loadMapScript(options);
                 return;
-            } else if (!this.mapLoaded && google !== void 0) {
-                this.mapLoaded = true;
+            } else if (typeof google !== 'undefined') {
+                var opt = {
+                    maxZoom: maxZoom,
+                    center: new google.maps.LatLng(bounds[0], bounds[1]),
+                    zoom: zoom,
+                    disableDefaultUI: true
+                };
+
+                if (options !== void 0 && options.maxZoom !== void 0) {
+                    opt.maxZoom = options.maxZoom;
+                }
+
+                if (options !== void 0 && options.scrollWheelZoom !== void 0) {
+                    opt.scrollwheel = options.scrollWheelZoom;
+                }
+
+                this.map = new google.maps.Map(Backbone.$(this.el).get(0), opt);
+                this.options.vent.trigger('map.loaded');
             }
-
-            var opt = {
-                maxZoom: maxZoom,
-                center: new google.maps.LatLng(bounds[0], bounds[1]),
-                zoom: zoom,
-                disableDefaultUI: true
-            };
-
-            var mapOpt = {};
-
-            if (options !== void 0 && options.maxZoom !== void 0) {
-                opt.maxZoom = options.maxZoom;
-            }
-
-            if (options !== void 0 && options.scrollWheelZoom !== void 0) {
-                opt.scrollwheel = options.scrollWheelZoom;
-            }
-
-            this.map = new google.maps.Map(Backbone.$(this.el).get(0), opt);
-            this.options.vent.trigger('map.loaded');
         },
 
         /**
