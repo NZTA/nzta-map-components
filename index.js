@@ -973,8 +973,8 @@
             // get google maps api
             Backbone.$.getScript(options.mapUrl)
                 .done(function() {
-                    this.apiLoading = false;
-                    this.apiLoaded = true;
+                    self.apiLoading = false;
+                    self.apiLoaded = true;
                     self._addMap(options);
                 })
                 .fail(function() {
@@ -992,8 +992,7 @@
          * @desc Add a Google map to the MapView.
          */
         _addMap: function (options) {
-            var self = this,
-                bounds = (options !== void 0 && options.bounds !== void 0) ? options.bounds : [-40.866119, 174.143780],
+            var bounds = (options !== void 0 && options.bounds !== void 0) ? options.bounds : [-40.866119, 174.143780],
                 zoom = (options !== void 0 && options.zoom !== void 0) ? options.zoom : 5,
                 maxZoom = (options !== void 0 && options.maxZoom !== void 0) ? options.maxZoom : 18;
 
