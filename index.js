@@ -872,14 +872,12 @@
         /**
          * Set to true once external map api script loaded
          */
-        mapLoaded: false,
+        apiLoaded: false,
 
         /**
          * True while map api is being loaded, set to false once loaded
          */
-        mapLoading: false,
-
-        apiScriptUrl: 'https://maps.googleapis.com/maps/api/js?key={apiKey}',
+        apiLoading: false,
       
         /**
          * @func initialize
@@ -967,7 +965,7 @@
                 throw new Error('No url provided for google maps api');
             }
 
-            this.mapLoading = true;
+            this.apiLoading = true;
 
             // get library for google.loader.ClientLocation
             Backbone.$.getScript('https://www.google.com/jsapi');
@@ -975,8 +973,8 @@
             // get google maps api
             Backbone.$.getScript(options.mapUrl)
                 .done(function() {
-                    this.mapLoading = false;
-                    this.mapLoaded = true;
+                    this.apiLoading = false;
+                    this.apiLoaded = true;
                     self._addMap(options);
                 })
                 .fail(function() {
@@ -999,7 +997,7 @@
                 zoom = (options !== void 0 && options.zoom !== void 0) ? options.zoom : 5,
                 maxZoom = (options !== void 0 && options.maxZoom !== void 0) ? options.maxZoom : 18;
 
-            if (!this.mapLoaded && !this.mapLoading) {
+            if (!this.apiLoaded && !this.apiLoading) {
                 this._loadMapScript(options);
                 return;
             } else if (typeof google !== 'undefined') {
