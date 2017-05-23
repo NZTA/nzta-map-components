@@ -1148,6 +1148,10 @@
             }
 
             this.map.fitBounds(bounds);
+
+            // zoom is too close compared to previous leaflet implementation,
+            // so manually adjust it by 2
+            this.map.setZoom(this.map.getZoom() - 2);
         },
 
         /**
