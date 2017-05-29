@@ -994,7 +994,8 @@
         _addMap: function (options) {
             var bounds = (options !== void 0 && options.bounds !== void 0) ? options.bounds : [-40.866119, 174.143780],
                 zoom = (options !== void 0 && options.zoom !== void 0) ? options.zoom : 5,
-                maxZoom = (options !== void 0 && options.maxZoom !== void 0) ? options.maxZoom : 18;
+                maxZoom = (options !== void 0 && options.maxZoom !== void 0) ? options.maxZoom : 18,
+                minZoom = (options !== void 0 && options.minZoom !== void 0) ? options.minZoom : 0;
 
             if (!this.apiLoaded && !this.apiLoading) {
                 this._loadMapScript(options);
@@ -1002,6 +1003,7 @@
             } else if (typeof google !== 'undefined') {
                 var opt = {
                     maxZoom: maxZoom,
+                    minZoom: minZoom,
                     center: new google.maps.LatLng(bounds[0], bounds[1]),
                     zoom: zoom,
                     disableDefaultUI: true
@@ -1141,7 +1143,8 @@
          */
         _setMapBounds: function (northingEasting, options) {
             var options = (options !== void 0 ? options : {}),
-                bounds = new google.maps.LatLngBounds();
+                bounds = new google.maps.LatLngBounds(),
+                self = this;
 
             for (var i = 0; i < northingEasting.length; i++) {
                 bounds.extend(new google.maps.LatLng(northingEasting[i][0], northingEasting[i][1]));
@@ -1149,9 +1152,25 @@
 
             this.map.fitBounds(bounds);
 
-            // zoom is too close compared to previous leaflet implementation,
-            // so manually adjust it by 2
-            this.map.setZoom(this.map.getZoom() - 2);
+            this._checkZoom(options);
+
+            // add delay as zoom is slow to load on first load
+            setTimeout(function () {
+                self._checkZoom(options);
+            }, 500);
+        },
+
+        /**
+         * Checks if options has minZoom and zoom to this zoom level if greater
+         *
+         * @param options
+         * @private
+         */
+        _checkZoom: function(options) {
+            // if min zoom is configured, restrict the zoom after map has been fit to bounds
+            if (options.maxZoom && this.map.getZoom() > options.maxZoom) {
+                this.map.setZoom(options.maxZoom);
+            }
         },
 
         /**
@@ -1249,7 +1268,9 @@
             _.each(geoJsonCollection.models, function (geoJsonModel) {
                 // manually add points to marker clusterer
                 if (geoJsonModel.attributes.geometry.type === 'Point') {
-                    mapLayer.markers.addMarker(self._getMarker(geoJsonModel.attributes, geoJsonCollection, layerId), true);
+                    var marker = self._getMarker(geoJsonModel.attributes, geoJsonCollection, layerId);
+                    //add to clusterer
+                    mapLayer.markers.addMarker(marker, true);
 
                     // add to geojson
                 } else {
@@ -1285,7 +1306,9 @@
                             ),
                             anchor: new google.maps.Point(geoJsonCollection._iconAnchor[0], geoJsonCollection._iconAnchor[1])
                         },
-                    zIndex: geoJsonCollection._zIndexOffset
+                    zIndex: geoJsonCollection._zIndexOffset,
+                    id: feature.properties.id,
+                    feature: feature
                 });
 
             // add click handler for marker
