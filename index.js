@@ -70,7 +70,7 @@
 
         routes: {
             '': '_handleNav',
-            ':action/:type(/:id)': '_handleNav'
+            ':action(/:type)(/:id)': '_handleNav'
         },
 
         _previousFragment: null,
