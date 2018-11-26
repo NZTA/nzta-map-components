@@ -3,4 +3,6 @@ node_js:
   - "0.10"
 script: "npm run test"
 notifications:
-  slack: silverstripeltd:MKoWwPwo6IUECYClkElwFOoM
+  slack:
+    rooms:
+      secure: R8qg+jT647UKhP7HXxNljy6UV5Z3jh2qPc1ux0gT5gA6qKnbg65PEpH/K5i3N23MQsTjWWnO6owhQM//uF+Mm6FeapvMqGYIJYPROfxrYoamKIBu9xHtQem+zmv2ygHHCjhyKGNBSswQ9VmAqysAO0GWYmnapIY/o49OJYiNa1k=
