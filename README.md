@@ -1,6 +1,6 @@
 # NZTA Map Components
 
-[![Build Status](https://travis-ci.org/silverstripe-iterators/nzta-map-components.svg)](https://travis-ci.org/silverstripe-iterators/nzta-map-components)
+[![Build Status](https://travis-ci.org/NZTA/nzta-map-components.svg)](https://travis-ci.org/NZTA/nzta-map-components)
 
 A collection of Backbone components useful for building NZTA maps.
 
